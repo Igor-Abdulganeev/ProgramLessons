@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">ProgramLessons</string>
+    <string name="login_name_hint">login name</string>
+    <string name="login_pass_hint">password</string>
+    <string name="login_button_text">Enter</string>
+    <string name="text_login_name">nobody</string>
 </resources>
