@@ -10,5 +10,18 @@
     <string name="reviews_text">%1$s reviews</string>
     <string name="text_back_button">Leave A REVIEW</string>
     <string name="text_reservation_button">BOOK YOUR TICKET</string>
+    <string name="contentdescription">contentDescription</string>
+    <string name="text_actor_one">Robert Downey Jr.</string>
+    <string name="text_actor_two">Chris Evans</string>
+    <string name="text_actor_three">Mark Ruffalo</string>
+    <string name="text_actor_four">Chris Hemsworth</string>
+    <string name="head_cast">Cast</string>
+    <string name="all_actors">See All</string>
+    <string name="text_description">After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more in order to reverse Thanos\' actions and restore balance to the universe.</string>
+    <string name="head_description">Storyline</string>
+    <string name="tag_text">Action, Adventure, Drama</string>
+    <string name="name_movie">Avengers: \nEnd Game</string>
+    <string name="pg_text">13+</string>
+    <string name="text_back">back</string>
     <!--End movie card -->
 </resources>
