@@ -8,6 +8,7 @@ import androidx.databinding.DataBindingUtil
 import ru.gorinih.androidacademy.databinding.ActivityMainBinding
 import ru.gorinih.androidacademy.model.User
 import ru.gorinih.androidacademy.ui.ResultLogin
+import ru.gorinih.androidacademy.ui.TestMovie
 
 class MainActivity : AppCompatActivity() {
     private lateinit var binding : ActivityMainBinding
@@ -29,7 +30,7 @@ class MainActivity : AppCompatActivity() {
 
         // intent with Parcelable
         binding.loginEnter.setOnClickListener {
-            if (onClickEnter()){
+            if (onClickEnter()) {
                 val data = User(name = binding.loginName.text.toString())
                 val intent = Intent(this, ResultLogin::class.java)
                 intent.putExtra("loginName", data)
@@ -37,7 +38,12 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
-        binding.loginPassVisible.setOnClickListener{onClickPassVisible()}
+        binding.movieTest.setOnClickListener {
+            val intent = Intent(this, TestMovie::class.java)
+            startActivity(intent)
+        }
+
+        binding.loginPassVisible.setOnClickListener { onClickPassVisible() }
     }
 
     private fun onClickEnter() = binding.loginPass.text.toString() == "1234"
@@ -47,11 +53,11 @@ class MainActivity : AppCompatActivity() {
       Log.d(TAG,binding.loginPass.inputType.toString())
         if (binding.loginPass.inputType==18) {
             binding.loginPass.inputType=2
-            binding.loginPassVisible.setImageResource(R.drawable.ic_baseline_visibility_24)
+            binding.loginPassVisible.setImageResource(R.drawable.ic_visibility_24)
         }
         else {
             binding.loginPass.inputType = 18
-            binding.loginPassVisible.setImageResource(R.drawable.ic_baseline_visibility_off_24)
+            binding.loginPassVisible.setImageResource(R.drawable.ic_visibility_off_24)
         }
     }
 

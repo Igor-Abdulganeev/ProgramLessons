@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <shape xmlns:android="http://schemas.android.com/apk/res/android">
-<gradient android:startColor="@color/bg_item_card_movie_gradient_start"
-    android:endColor="@color/bg_item_card_movie_gradient_end"
-    android:type="radial"
-    />
+<gradient
+    android:startColor="@color/grayish_purplish_blue"
+    android:endColor="@color/sapphire_blue"
+    android:type="radial" />
     <corners android:radius="8dp"/>
-    <stroke android:color="@color/pixie_gray_one_text"
-        android:width="1dp"/>
+    <stroke
+        android:color="@color/marengo"
+        android:width="1dp" />
 </shape>

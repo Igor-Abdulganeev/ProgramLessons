@@ -6,8 +6,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/margin_main_16"
-    android:padding="@dimen/margin_main_16"
+    android:layout_margin="@dimen/margin_16"
+    android:padding="@dimen/margin_16"
     tools:context=".MainActivity">
 
     <EditText
@@ -39,16 +39,25 @@
         android:text="@string/login_button_text"
         app:layout_constraintTop_toBottomOf="@+id/login_pass"
         app:layout_constraintEnd_toEndOf="parent"
-        android:layout_marginRight="@dimen/margin_main_32"
-        />
+        android:layout_marginRight="@dimen/margin_main_32" />
+
     <ImageButton
         android:id="@+id/login_pass_visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@drawable/ic_baseline_visibility_off_24"
+        android:src="@drawable/ic_visibility_off_24"
         app:layout_constraintStart_toEndOf="@+id/login_pass"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/login_pass"
-        />
+        app:layout_constraintTop_toTopOf="@+id/login_pass" />
+
+    <Button
+        android:id="@+id/movie_test"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="start screen movie"
+        app:layout_constraintEnd_toStartOf="@+id/login_enter"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/login_enter" />
 </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 <style name="MovieRatingBar">
-    <item name="colorControlNormal">@color/pixie_gray_two_text</item>
-    <item name="colorControlActivated">@color/button_gradient_end_FF3365</item>
+    <item name="colorControlNormal">@color/pearl_blackberry</item>
+    <item name="colorControlActivated">@color/radical_red</item>
 </style>
 
     <style name="df">
