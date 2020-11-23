@@ -1,11 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-<style name="MovieRatingBar">
-    <item name="colorControlNormal">@color/pearl_blackberry</item>
-    <item name="colorControlActivated">@color/radical_red</item>
-</style>
+
+    <style name="MovieRatingBar">
+        <item name="colorControlNormal">@color/pearl_blackberry</item>
+        <item name="colorControlActivated">@color/radical_red</item>
+    </style>
 
     <style name="df">
         <item name="android:shape">rectangle</item>
+    </style>
+
+    <style name="cornerImageView" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">4dp</item>
     </style>
 </resources>
