@@ -61,12 +61,12 @@
                     android:layout_marginBottom="@dimen/margin_6"
                     android:contentDescription="@string/contentdescription"
                     android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:layout_constraintBottom_toTopOf="@id/actor_one_text_view"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toStartOf="@id/actor_two_image_view"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/head_cast_text_view"
+                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:srcCompat="@drawable/actor1"
                     tools:src="@drawable/actor1" />
 
@@ -93,12 +93,12 @@
                     android:layout_marginBottom="@dimen/margin_4"
                     android:contentDescription="@string/contentdescription"
                     android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:layout_constraintBottom_toTopOf="@id/actor_one_text_view"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toStartOf="@id/actor_three_image_view"
                     app:layout_constraintStart_toEndOf="@id/actor_one_image_view"
                     app:layout_constraintTop_toTopOf="@id/actor_one_image_view"
+                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:srcCompat="@drawable/actor2"
                     tools:src="@drawable/actor2" />
 
@@ -125,12 +125,12 @@
                     android:layout_marginBottom="@dimen/margin_6"
                     android:contentDescription="@string/contentdescription"
                     android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:layout_constraintBottom_toTopOf="@id/actor_one_text_view"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toStartOf="@id/actor_four_image_view"
                     app:layout_constraintStart_toEndOf="@id/actor_two_image_view"
                     app:layout_constraintTop_toTopOf="@id/actor_one_image_view"
+                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:srcCompat="@drawable/actor3"
                     tools:src="@drawable/actor3" />
 
@@ -158,12 +158,12 @@
                     android:layout_marginBottom="@dimen/margin_4"
                     android:contentDescription="@string/contentdescription"
                     android:scaleType="centerCrop"
-                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:layout_constraintBottom_toTopOf="@id/actor_one_text_view"
                     app:layout_constraintDimensionRatio="1:1"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@id/actor_three_image_view"
                     app:layout_constraintTop_toTopOf="@id/actor_one_image_view"
+                    app:shapeAppearanceOverlay="@style/cornerImageView"
                     app:srcCompat="@drawable/actor4"
                     tools:src="@drawable/actor4" />
 
