@@ -6,7 +6,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/bg_corners_32dp">
+        android:background="@color/sapphire_blue_one">
 
         <Button
             android:id="@+id/back_button"
@@ -67,7 +67,7 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@id/head_cast_text_view"
                     app:srcCompat="@drawable/actor1"
-                    tools:src="@drawable/actor1" />
+                    android:foreground="@drawable/bg_corners" />
 
                 <TextView
                     android:id="@+id/actor_one_text_view"
@@ -98,7 +98,8 @@
                     app:layout_constraintStart_toEndOf="@id/actor_one_image_view"
                     app:layout_constraintTop_toTopOf="@id/actor_one_image_view"
                     app:srcCompat="@drawable/actor2"
-                    tools:src="@drawable/actor2" />
+                    tools:src="@drawable/actor2"
+                    android:foreground="@drawable/bg_corners" />
 
                 <TextView
                     android:id="@+id/actor_two_text_view"
@@ -129,7 +130,8 @@
                     app:layout_constraintStart_toEndOf="@id/actor_two_image_view"
                     app:layout_constraintTop_toTopOf="@id/actor_one_image_view"
                     app:srcCompat="@drawable/actor3"
-                    tools:src="@drawable/actor3" />
+                    tools:src="@drawable/actor3"
+                    android:foreground="@drawable/bg_corners" />
 
                 <TextView
                     android:id="@+id/actor_three_text_view"
@@ -161,7 +163,8 @@
                     app:layout_constraintStart_toEndOf="@id/actor_three_image_view"
                     app:layout_constraintTop_toTopOf="@id/actor_one_image_view"
                     app:srcCompat="@drawable/actor4"
-                    tools:src="@drawable/actor4" />
+                    tools:src="@drawable/actor4"
+                    android:foreground="@drawable/bg_corners" />
 
                 <TextView
                     android:id="@+id/actor_four_text_view"
@@ -348,7 +351,7 @@
                     android:layout_marginStart="@dimen/margin_16"
                     android:layout_marginTop="@dimen/margin_36"
                     android:layout_marginBottom="@dimen/margin_8"
-                    android:background="@drawable/bg_corners_32dp"
+                    android:background="@drawable/bg_corners"
                     android:elevation="4dp"
                     app:layout_constraintBottom_toTopOf="@id/name_movie_text_view"
                     app:layout_constraintStart_toStartOf="@id/movie_image_view"
