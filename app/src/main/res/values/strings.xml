@@ -21,7 +21,9 @@
     <string name="head_description">Storyline</string>
     <string name="tag_text">Action, Adventure, Drama</string>
     <string name="name_movie">Avengers: \nEnd Game</string>
+    <string name="name_movie_string">Avengers: End Game</string>
     <string name="pg_text">13+</string>
     <string name="text_back">back</string>
+    <string name="head_movies_list">Movies list</string>
     <!--End movie card -->
 </resources>

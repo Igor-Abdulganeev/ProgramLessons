@@ -5,11 +5,13 @@
     <color name="purple_700">#FF3700B3</color>
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
+
+    <!-- movie color    -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="marengo">#565665</color>
     <color name="gainsborough">#DCDCDC</color>
-    <color name="radical_red">#FF3466</color>
+    <color name="radical_red">#FF3365</color>
     <color name="grayish_purplish_blue">#404056</color>
     <color name="sapphire_blue">#222232</color>
     <color name="light_telegrey">#D2D2D2</color>
@@ -20,5 +22,8 @@
     <color name="sapphire_blue_two">#212130</color>
     <color name="lilac">#8036E7</color>
     <color name="light_gray">#D8D8D8</color>
+    <color name="silver">#C4C4C4</color>
+    <color name="pearl_blackberry_one">#636375</color>
+
 
 </resources>

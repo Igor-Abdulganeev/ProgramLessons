@@ -1,67 +1,50 @@
 package ru.gorinih.androidacademy
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import ru.gorinih.androidacademy.databinding.ActivityMainBinding
-import ru.gorinih.androidacademy.model.User
-import ru.gorinih.androidacademy.ui.ResultLogin
-import ru.gorinih.androidacademy.ui.TestMovie
+import ru.gorinih.androidacademy.ui.FragmentMoviesDetails
+import ru.gorinih.androidacademy.ui.FragmentMoviesList
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding : ActivityMainBinding
+class MainActivity : AppCompatActivity(), FragmentMoviesList.ClickFragment {
+    private lateinit var binding: ActivityMainBinding
+    private var currentTag = MOVIES_FRAGMENT_TAG
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-
-        //old intent, without Parcelable
-/*
-        binding.loginEnter.setOnClickListener {
-            if (onClickEnter())
-        {
-            val intent = Intent(this, ResultLogin::class.java)
-            intent.putExtra("loginName", binding.loginName.text.toString())
-            startActivity(intent)
-        }
-        }
-*/
-
-        // intent with Parcelable
-        binding.loginEnter.setOnClickListener {
-            if (onClickEnter()) {
-                val data = User(name = binding.loginName.text.toString())
-                val intent = Intent(this, ResultLogin::class.java)
-                intent.putExtra("loginName", data)
-                startActivity(intent)
-            }
-        }
-
-        binding.movieTest.setOnClickListener {
-            val intent = Intent(this, TestMovie::class.java)
-            startActivity(intent)
-        }
-
-        binding.loginPassVisible.setOnClickListener { onClickPassVisible() }
+        currentTag = savedInstanceState?.getString(KEY_FRAGMENT_TAG) ?: MOVIES_FRAGMENT_TAG
+        supportFragmentManager.beginTransaction()
+            .replace(
+                R.id.fragment_ui,
+                supportFragmentManager.findFragmentByTag(currentTag) ?: FragmentMoviesList(),
+                currentTag
+            )
+            .commit()
     }
 
-    private fun onClickEnter() = binding.loginPass.text.toString() == "1234"
+    override fun onSaveInstanceState(outState: Bundle) {
+        super.onSaveInstanceState(outState)
+        outState.putString(KEY_FRAGMENT_TAG, currentTag)
+    }
 
+    override fun onMovieClick() {
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_ui, FragmentMoviesDetails(), MOVIE_FRAGMENT_TAG)
+            .addToBackStack(null)
+            .commit()
+        currentTag = MOVIE_FRAGMENT_TAG
+    }
 
-    private fun onClickPassVisible() {
-      Log.d(TAG,binding.loginPass.inputType.toString())
-        if (binding.loginPass.inputType==18) {
-            binding.loginPass.inputType=2
-            binding.loginPassVisible.setImageResource(R.drawable.ic_visibility_24)
-        }
-        else {
-            binding.loginPass.inputType = 18
-            binding.loginPassVisible.setImageResource(R.drawable.ic_visibility_off_24)
-        }
+    override fun onBackPressed() {
+        super.onBackPressed()
+        currentTag = MOVIES_FRAGMENT_TAG
     }
 
     companion object {
-        const val TAG = "MAINACTIVITY"
+        const val MOVIES_FRAGMENT_TAG = "movies.fragment.tag"
+        const val MOVIE_FRAGMENT_TAG = "movie.fragment.tag"
+        const val KEY_FRAGMENT_TAG = "fragment.tag.name"
     }
+
 }
