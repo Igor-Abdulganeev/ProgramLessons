@@ -13,13 +13,15 @@ class FragmentMoviesList : Fragment() {
 
     private lateinit var binding: FragmentMoviesListBinding
     private var listenerClickFragment: ClickFragment? = null
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentMoviesListBinding.inflate(inflater, container, false).run {
-        binding = this
-        binding.root
-    }
+    ) = FragmentMoviesListBinding.inflate(inflater, container, false)
+        .run {
+            binding = this
+            binding.root
+        }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -30,7 +32,14 @@ class FragmentMoviesList : Fragment() {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        listenerClickFragment = context as ClickFragment
+        if (context is ClickFragment) {
+            listenerClickFragment = context
+        }
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        listenerClickFragment = null
     }
 
     interface ClickFragment {

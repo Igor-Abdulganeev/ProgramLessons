@@ -5,23 +5,14 @@
     <item name="colorControlActivated">@color/radical_red</item>
 </style>
 
-    <style name="df">
-        <item name="android:shape">rectangle</item>
-    </style>
-
-    <style name="cornerImageView" parent="">
+    <style name="CornerImageView">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">4dp</item>
     </style>
 
-    <style name="cornerImageView_6" parent="">
+    <style name="CornerImageView_6">
         <item name="cornerFamily">rounded</item>
         <item name="cornerSize">6dp</item>
-    </style>
-
-    <style name="gradientText">
-        <item name="android:startColor">#FFFFFF</item>
-        <item name="android:endColor">#FF3466</item>
     </style>
 
 </resources>
