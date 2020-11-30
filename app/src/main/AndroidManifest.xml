@@ -9,7 +9,6 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.AppCompat.NoActionBar">
-        <activity android:name=".ui.TestMovie" />
         <activity android:name=".ui.ResultLogin" />
         <activity android:name=".MainActivity">
             <intent-filter>
