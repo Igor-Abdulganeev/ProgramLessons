@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import ru.gorinih.androidacademy.databinding.ActivityMainBinding
+import ru.gorinih.androidacademy.model.Movie
 import ru.gorinih.androidacademy.ui.FragmentMovieDetails
 import ru.gorinih.androidacademy.ui.FragmentMoviesList
 
@@ -14,6 +15,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ClickFragment {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(
@@ -23,6 +25,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ClickFragment {
                 )
                 .commit()
         }
+
     }
 
     override fun onMovieClick() {
@@ -35,6 +38,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ClickFragment {
             .addToBackStack(null)
             .commit()
     }
+
 
     companion object {
         const val MOVIES_FRAGMENT_TAG = "movies.fragment.tag"

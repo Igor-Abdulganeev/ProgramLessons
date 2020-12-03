@@ -6,7 +6,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
+import ru.gorinih.androidacademy.adapter.ListMoviesRecyclerViewAdapter
+import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
+import ru.gorinih.androidacademy.model.Movie
 
 
 class FragmentMoviesList : Fragment() {
@@ -15,9 +19,10 @@ class FragmentMoviesList : Fragment() {
     private var listenerClickFragment: ClickFragment? = null
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
-    ) = FragmentMoviesListBinding.inflate(inflater, container, false)
+    )= FragmentMoviesListBinding.inflate(inflater, container, false)
         .run {
             binding = this
             binding.root
@@ -25,6 +30,10 @@ class FragmentMoviesList : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val adapter = ListMoviesRecyclerViewAdapter()
+        binding.listMovies.adapter = adapter
+        val listMoves = fakeListMovies()
+        adapter.setData(listMoves)
         binding.constraintMovieList.setOnClickListener {
             listenerClickFragment?.onMovieClick()
         }
@@ -45,4 +54,27 @@ class FragmentMoviesList : Fragment() {
     interface ClickFragment {
         fun onMovieClick()
     }
+
+
+        // get fake data
+        private fun fakeListMovies(): List<Movie> =
+            listOf<Movie>(
+                Movie(0,
+                    "Avengers: End Game",
+                    137,
+                    125,
+                    4,
+                    "Action, Adventure, Drama",
+                    "13+",
+                    false,"poster1"),
+                Movie(1,
+                    "Tenet",
+                    97,
+                    98,
+                    5,
+                    "Action, Sci-Fi, Thriller",
+                    "16+",
+                    true,"poster2")
+
+            )
 }
