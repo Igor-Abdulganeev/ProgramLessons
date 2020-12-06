@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.databinding.DataBindingUtil
 import ru.gorinih.androidacademy.databinding.ActivityMainBinding
-import ru.gorinih.androidacademy.model.Movie
 import ru.gorinih.androidacademy.ui.FragmentMovieDetails
 import ru.gorinih.androidacademy.ui.FragmentMoviesList
 
@@ -28,11 +27,11 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ClickFragment {
 
     }
 
-    override fun onMovieClick() {
+    override fun onMovieClick(id: Int) {
         supportFragmentManager.beginTransaction()
             .replace(
                 R.id.fragment_ui,
-                FragmentMovieDetails(),
+                FragmentMovieDetails.instanceFragmentMovie(id),
                 MOVIE_FRAGMENT_TAG
             )
             .addToBackStack(null)
