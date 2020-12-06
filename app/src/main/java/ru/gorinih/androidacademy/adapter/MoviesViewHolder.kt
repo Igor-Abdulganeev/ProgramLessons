@@ -46,6 +46,7 @@ class MoviesViewHolder(view: View) : ListMoviesViewHolder(view) {
 //        val image = resource.getDrawable(id, resource.newTheme())
 //        poster.setImageDrawable(image)
         Glide.with(itemView.context)
+            .asBitmap()
             .load(item.poster)
             .placeholder(R.drawable.ic_no_image)
             .into(poster)
