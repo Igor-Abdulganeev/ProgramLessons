@@ -1,6 +1,8 @@
 package ru.gorinih.androidacademy.adapter
 
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.RatingBar
 import android.widget.TextView
@@ -9,7 +11,7 @@ import com.bumptech.glide.Glide
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.model.Movie
 
-class MoviesViewHolder(view: View) : ListMoviesViewHolder(view) {
+class MoviesViewHolder private constructor(view: View) : ListMoviesViewHolder(view) {
     private val nameMovie: TextView = view.findViewById(R.id.name_movie_text_view)
     private val movieDuration: TextView = view.findViewById(R.id.minute_text_view)
     private val reviews: TextView = view.findViewById(R.id.reviews_text_view)
@@ -25,7 +27,7 @@ class MoviesViewHolder(view: View) : ListMoviesViewHolder(view) {
         listener: (Int) -> Unit
     ) {
         background.setOnClickListener { listener(item.id) }
-        //       itemView.setOnClickListener { listener(item.id) } // don`t work
+        //itemView.setOnClickListener { listener(item.id) } // don`t work
         //       val packageName = itemView.context.packageName
         //BuildConfig.APPLICATION_ID
         val resource = itemView.resources
@@ -50,5 +52,14 @@ class MoviesViewHolder(view: View) : ListMoviesViewHolder(view) {
             .load(item.poster)
             .placeholder(R.drawable.ic_no_image)
             .into(poster)
+    }
+
+    companion object {
+        fun from(parent: ViewGroup): ListMoviesViewHolder {
+            return MoviesViewHolder(
+                LayoutInflater.from(parent.context)
+                    .inflate(R.layout.view_holder_movie, parent, false)
+            )
+        }
     }
 }
