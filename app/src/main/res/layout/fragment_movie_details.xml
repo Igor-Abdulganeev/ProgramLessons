@@ -7,7 +7,7 @@
 
         <variable
             name="movie"
-            type="ru.gorinih.androidacademy.model.Movie" />
+            type="ru.gorinih.androidacademy.model.Movies.Movie" />
     </data>
 
     <ScrollView

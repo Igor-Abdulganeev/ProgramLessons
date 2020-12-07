@@ -2,10 +2,10 @@ package ru.gorinih.androidacademy.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import ru.gorinih.androidacademy.model.Movie
+import ru.gorinih.androidacademy.model.Movies
 
 class ListMoviesRecyclerViewAdapter(private val listener: (Int) -> Unit) :
-    ListAdapter<Movie, ListMoviesViewHolder>(ListMoviesDiffUtils()) {
+    ListAdapter<Movies, ListMoviesViewHolder>(ListMoviesDiffUtils()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListMoviesViewHolder {
         return ListMoviesViewHolder.from(parent, viewType)
@@ -20,12 +20,9 @@ class ListMoviesRecyclerViewAdapter(private val listener: (Int) -> Unit) :
 
     override fun onBindViewHolder(holder: ListMoviesViewHolder, position: Int) {
         val item = getItem(position)
-        when (holder) {
-            is MoviesViewHolder -> holder.bind(item, listener)
-            is HeaderViewHolder -> {
-            }
+        if (holder is MoviesViewHolder) {
+            holder.bind(item as Movies.Movie, listener)
         }
-
     }
 
     companion object {

@@ -10,12 +10,13 @@ import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.adapter.ListActorsRecyclerViewAdapter
 import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
 import ru.gorinih.androidacademy.model.FakeMovies
-import ru.gorinih.androidacademy.model.Movie
+import ru.gorinih.androidacademy.model.Movies
 
 class FragmentMovieDetails : Fragment() {
 
     private lateinit var binding: FragmentMovieDetailsBinding
-    private lateinit var movie: Movie
+    private lateinit var movie: Movies.Movie
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -27,8 +28,8 @@ class FragmentMovieDetails : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val idMovie = arguments?.getInt("idMovie") ?: 0
-        movie = FakeMovies().getMoviesById(idMovie)
+        val idMovie = requireNotNull(arguments?.getInt("idMovie"))
+        movie = requireNotNull(FakeMovies().getMoviesById(idMovie))
         val actors = FakeMovies().getListActors(movie.id)
         val adapter = ListActorsRecyclerViewAdapter()
         binding.listActors.adapter = adapter
@@ -42,7 +43,7 @@ class FragmentMovieDetails : Fragment() {
     }
 
     companion object {
-        fun instanceFragmentMovie(id: Int): FragmentMovieDetails {
+        fun newInstance(id: Int): FragmentMovieDetails {
             val args = Bundle()
             args.putInt("idMovie", id)
             val fragment = FragmentMovieDetails()

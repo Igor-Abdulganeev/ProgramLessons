@@ -31,7 +31,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ClickFragment {
         supportFragmentManager.beginTransaction()
             .replace(
                 R.id.fragment_ui,
-                FragmentMovieDetails.instanceFragmentMovie(id),
+                FragmentMovieDetails.newInstance(id),
                 MOVIE_FRAGMENT_TAG
             )
             .addToBackStack(null)

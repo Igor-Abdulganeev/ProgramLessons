@@ -1,19 +1,27 @@
 package ru.gorinih.androidacademy.model
 
-data class Movie(
-    val id: Int,
-    val nameMovie: String,
-    val movieDuration: Int,
-    val reviews: Int,
-    val rating: Float,
-    val movieGenre: String,
-    val rated: String,
-    val like: Boolean,
-    val detailPoster: String,
-    val poster: String,
-    val description: String,
-    val listOfActors: List<Actor>
-)
+import ru.gorinih.androidacademy.model.Movies.Header
+import ru.gorinih.androidacademy.model.Movies.Movie
+
+
+sealed class Movies() {
+    data class Movie(
+        val id: Int,
+        val nameMovie: String,
+        val movieDuration: Int,
+        val reviews: Int,
+        val rating: Float,
+        val movieGenre: String,
+        val rated: String,
+        val like: Boolean,
+        val detailPoster: String,
+        val poster: String,
+        val description: String,
+        val listOfActors: List<Actor>
+    ) : Movies()
+
+    object Header : Movies()
+}
 
 data class Actor(
     val id: Int,
@@ -248,19 +256,8 @@ private val listActors = listOf<Actor>(
     )
 )
 
-private val listMovies = listOf<Movie>(
-    Movie(0,
-        "",
-        0,
-        0,
-        0.0F,
-        "",
-        "",
-        false,
-        "",
-        "",
-        "",
-        listActors.filter { it.idMovie == 0 }),
+private val listMovies = listOf<Movies>(
+    Header,
     Movie(
         1,
         "Dolittle",
@@ -349,6 +346,7 @@ private val listMovies = listOf<Movie>(
 
 class FakeMovies {
     fun getListMovies() = listMovies
-    fun getMoviesById(id: Int) = listMovies.filter { it.id == id }[0]
+    fun getMoviesById(id: Int): Movie = listMovies[id] as Movie
+
     fun getListActors(id: Int) = listActors.filter { it.idMovie == id }
 }

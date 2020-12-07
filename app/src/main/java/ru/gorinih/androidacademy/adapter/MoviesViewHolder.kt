@@ -9,7 +9,7 @@ import android.widget.TextView
 import androidx.constraintlayout.widget.ConstraintLayout
 import com.bumptech.glide.Glide
 import ru.gorinih.androidacademy.R
-import ru.gorinih.androidacademy.model.Movie
+import ru.gorinih.androidacademy.model.Movies
 
 class MoviesViewHolder private constructor(view: View) : ListMoviesViewHolder(view) {
     private val nameMovie: TextView = view.findViewById(R.id.name_movie_text_view)
@@ -23,13 +23,10 @@ class MoviesViewHolder private constructor(view: View) : ListMoviesViewHolder(vi
     private val background: ConstraintLayout = view.findViewById(R.id.constraint_movie_list)
 
     fun bind(
-        item: Movie,
+        item: Movies.Movie,
         listener: (Int) -> Unit
     ) {
         background.setOnClickListener { listener(item.id) }
-        //itemView.setOnClickListener { listener(item.id) } // don`t work
-        //       val packageName = itemView.context.packageName
-        //BuildConfig.APPLICATION_ID
         val resource = itemView.resources
         nameMovie.text = item.nameMovie
         movieDuration.text =
@@ -39,14 +36,12 @@ class MoviesViewHolder private constructor(view: View) : ListMoviesViewHolder(vi
         movieGenre.text = item.movieGenre
         rated.text = item.rated
         like.setImageResource(
-            when (item.like) {
-                true -> R.drawable.ic_favorite_red_24
-                false -> R.drawable.ic_favorite_gray_24
+            if (item.like) {
+                R.drawable.ic_favorite_red_24
+            } else {
+                R.drawable.ic_favorite_gray_24
             }
         )
-//        val id = resource.getIdentifier(item.poster, "drawable", packageName)
-//        val image = resource.getDrawable(id, resource.newTheme())
-//        poster.setImageDrawable(image)
         Glide.with(itemView.context)
             .asBitmap()
             .load(item.poster)
