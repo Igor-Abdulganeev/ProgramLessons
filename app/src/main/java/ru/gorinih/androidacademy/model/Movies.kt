@@ -346,15 +346,9 @@ private val listMovies = listOf<Movies>(
 
 class FakeMovies {
     fun getListMovies() = listMovies
-    fun getMoviesById(id: Int): Movie? {
-        for (it in listMovies) {
-            if (it is Movie) {
-                if (it.id == id) return it
-            }
-        }
-        return null
-    }
 
+    fun getMoviesById(id: Int): Movie? = listMovies.filterIsInstance(Movie::class.java)
+        .firstOrNull() { it -> it.id == id }
 
     fun getListActors(id: Int) = listActors.filter { it.idMovie == id }
 }

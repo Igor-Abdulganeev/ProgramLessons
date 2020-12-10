@@ -14,7 +14,9 @@ import ru.gorinih.androidacademy.model.Movies
 
 class FragmentMovieDetails : Fragment() {
 
-    private lateinit var binding: FragmentMovieDetailsBinding
+    private var _binding: FragmentMovieDetailsBinding? = null
+    private val binding get() = _binding!!
+
     private lateinit var movie: Movies.Movie
 
     override fun onCreateView(
@@ -22,7 +24,7 @@ class FragmentMovieDetails : Fragment() {
         savedInstanceState: Bundle?
     ) = FragmentMovieDetailsBinding.inflate(inflater, container, false)
         .run {
-            binding = this
+            _binding = this
             binding.root
         }
 
@@ -34,12 +36,17 @@ class FragmentMovieDetails : Fragment() {
         val adapter = ListActorsRecyclerViewAdapter()
         binding.listActors.adapter = adapter
         actors.let { adapter.submitList(it) }
-        binding.movie = movie
         Glide.with(requireContext())
             .load(movie.detailPoster)
             .placeholder(R.drawable.ic_no_image)
             .into(binding.movieImageView)
         binding.backTextView.setOnClickListener { activity?.onBackPressed() }
+        binding.movie = movie
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     companion object {

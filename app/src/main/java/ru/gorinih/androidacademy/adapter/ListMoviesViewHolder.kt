@@ -4,6 +4,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import ru.gorinih.androidacademy.adapter.ListMoviesRecyclerViewAdapter.Companion.TYPE_HEADER
+import ru.gorinih.androidacademy.databinding.ViewHolderMovieBinding
 
 abstract class ListMoviesViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

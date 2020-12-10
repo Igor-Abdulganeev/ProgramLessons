@@ -12,9 +12,9 @@ class ListMoviesRecyclerViewAdapter(private val listener: (Int) -> Unit) :
     }
 
     override fun getItemViewType(position: Int): Int {
-        return when (position) {
-            0 -> TYPE_HEADER
-            else -> TYPE_MOVIE
+        return when (getItem(position)) {
+            is Movies.Header -> TYPE_HEADER
+            is Movies.Movie -> TYPE_MOVIE
         }
     }
 

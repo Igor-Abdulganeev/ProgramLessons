@@ -1,6 +1,7 @@
 package ru.gorinih.androidacademy.ui
 
 import android.content.Context
+import android.content.res.Configuration
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -15,7 +16,8 @@ import ru.gorinih.androidacademy.model.FakeMovies
 
 class FragmentMoviesList : Fragment() {
 
-    private lateinit var binding: FragmentMoviesListBinding
+    private var _binding: FragmentMoviesListBinding? = null
+    private val binding get() = _binding!!
     private var listenerClickFragment: ClickFragment? = null
 
     override fun onCreateView(
@@ -24,9 +26,14 @@ class FragmentMoviesList : Fragment() {
         savedInstanceState: Bundle?
     ) = FragmentMoviesListBinding.inflate(inflater, container, false)
         .run {
-            binding = this
+            _binding = this
             binding.root
         }
+
+    override fun onDestroyView() {
+        _binding = null
+        super.onDestroyView()
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -35,11 +42,12 @@ class FragmentMoviesList : Fragment() {
             listenerClickFragment?.onMovieClick(it)
         }
 
-        val layoutManager = GridLayoutManager(context, 2, RecyclerView.VERTICAL, false)
+        val spanCount = getSpanCount()
+        val layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
             override fun getSpanSize(position: Int): Int {
                 return if (position == 0) {
-                    2
+                    spanCount
                 } else {
                     1
                 }
@@ -67,4 +75,11 @@ class FragmentMoviesList : Fragment() {
         fun onMovieClick(id: Int)
     }
 
+    private fun getSpanCount(): Int {
+        return when (resources.configuration.orientation) {
+            Configuration.ORIENTATION_PORTRAIT -> 2
+            Configuration.ORIENTATION_LANDSCAPE -> 3
+            else -> 0
+        }
+    }
 }
