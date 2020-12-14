@@ -8,28 +8,27 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.gorinih.androidacademy.R
+import ru.gorinih.androidacademy.databinding.ViewHolderActorBinding
+import ru.gorinih.androidacademy.databinding.ViewHolderMovieBinding
 import ru.gorinih.androidacademy.model.Actor
 
-class ListActorsViewHolder private constructor(view: View) : RecyclerView.ViewHolder(view) {
-    private val nameActor: TextView = view.findViewById(R.id.actor_text_view)
-    private val photoActor: ImageView = view.findViewById(R.id.actor_image_view)
-
+class ListActorsViewHolder private constructor(private val binding: ViewHolderActorBinding) :
+    RecyclerView.ViewHolder(binding.root) {
     fun bind(
         item: Actor
     ) {
-        nameActor.text = item.nameActor
+        binding.actorTextView.text = item.nameActor
         Glide.with(itemView.context)
             .load(item.photoActor)
             .placeholder(R.drawable.ic_no_photo)
-            .into(photoActor)
+            .into(binding.actorImageView)
     }
 
     companion object {
         fun from(parent: ViewGroup): ListActorsViewHolder {
-            val view =
-                LayoutInflater.from(parent.context)
-                    .inflate(R.layout.view_holder_actor, parent, false)
-            return ListActorsViewHolder(view)
+            return ListActorsViewHolder(
+                ViewHolderActorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            )
         }
     }
 }

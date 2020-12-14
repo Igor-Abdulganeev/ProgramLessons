@@ -18,11 +18,13 @@ class MoviesViewHolder private constructor(private val binding: ViewHolderMovieB
         val resource = itemView.resources
         binding.nameMovieTextView.text = item.nameMovie
         binding.minuteTextView.text =
-            resource.getString(R.string.movie_length, item.movieDuration.toString())
+            resource.getString(R.string.movie_length, item.duration.toString())
         binding.reviewsTextView.text =
             resource.getString(R.string.reviews_text, item.reviews.toString())
-        binding.reviewsRatingBar.rating = item.rating
-        binding.tagTextView.text = item.movieGenre
+        binding.reviewsRatingBar.rating = item.rating / 2
+        var genre = ""
+        item.listOfGenre.sortedBy { it.nameGenre }.forEach { it -> genre += "${it.nameGenre} " }
+        binding.tagTextView.text = genre // item.listOfGenre.forEach { it -> it++ }
         binding.pgTextView.text = item.rated
         binding.favorite.setImageResource(
             if (item.like) {

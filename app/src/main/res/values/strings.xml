@@ -25,6 +25,6 @@
     <string name="pg_text">13+</string>
     <string name="text_back">back</string>
     <string name="head_movies_list">Movies list</string>
-    <string name="text_no_actor">No name</string>
+    <string name="text_no_actor">No actor</string>
     <!--End movie card -->
 </resources>

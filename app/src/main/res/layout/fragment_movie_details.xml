@@ -1,35 +1,26 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-    <data>
-
-        <variable
-            name="movie"
-            type="ru.gorinih.androidacademy.model.Movies.Movie" />
-    </data>
-
-    <ScrollView
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/constraint_movie_details"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/sapphire_blue_one">
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/constraint_movie_details"
-            android:layout_width="match_parent"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/list_actors"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="@color/sapphire_blue_one">
-
-            <androidx.recyclerview.widget.RecyclerView
-                android:id="@+id/list_actors"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@id/head_cast_text_view"
-                tools:listitem="@layout/view_holder_actor" />
+            android:orientation="horizontal"
+            app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/head_cast_text_view"
+            tools:listitem="@layout/view_holder_actor" />
 
             <TextView
                 android:id="@+id/head_cast_text_view"
@@ -71,7 +62,6 @@
                 android:gravity="center_vertical"
                 android:lineSpacingExtra="4sp"
                 android:maxLines="5"
-                android:text="@{movie.description}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_14"
                 app:layout_constraintBottom_toTopOf="@+id/head_cast_text_view"
@@ -101,7 +91,6 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="@dimen/margin_6"
-                android:text="@{@string/reviews_text(movie.reviews)}"
                 android:textAllCaps="true"
                 android:textColor="@color/pearl_blackberry"
                 android:textSize="@dimen/text_size_14"
@@ -110,17 +99,19 @@
                 app:layout_constraintStart_toEndOf="@id/reviews_rating_bar"
                 app:layout_constraintTop_toTopOf="@id/reviews_rating_bar"
                 tools:text="125 REVIEWS" />
+        <!--
+                    android:text="@{@string/reviews_text(movie.reviews)}"
+        -->
 
-            <RatingBar
-                android:id="@+id/reviews_rating_bar"
-                style="?android:attr/ratingBarStyleSmall"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/margin_16"
-                android:layout_marginBottom="@dimen/margin_28"
-                android:numStars="5"
-                android:rating="@{movie.rating}"
-                android:theme="@style/MovieRatingBar"
+        <RatingBar
+            android:id="@+id/reviews_rating_bar"
+            style="?android:attr/ratingBarStyleSmall"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/margin_16"
+            android:layout_marginBottom="@dimen/margin_28"
+            android:numStars="5"
+            android:theme="@style/MovieRatingBar"
                 app:layout_constraintBottom_toTopOf="@id/head_description_text_view"
                 app:layout_constraintEnd_toStartOf="@+id/reviews_text_view"
                 app:layout_constraintStart_toStartOf="parent"
@@ -134,7 +125,6 @@
                 android:layout_marginStart="@dimen/margin_16"
                 android:layout_marginEnd="@dimen/margin_16"
                 android:layout_marginBottom="@dimen/margin_8"
-                android:text="@{movie.movieGenre}"
                 android:textColor="@color/radical_red"
                 android:textSize="@dimen/text_size_14"
                 app:layout_constraintBottom_toTopOf="@+id/reviews_rating_bar"
@@ -155,7 +145,6 @@
                 android:letterSpacing="-0.01"
                 android:lineSpacingExtra="0sp"
                 android:maxLines="2"
-                android:text="@{movie.nameMovie}"
                 android:textColor="@color/gainsborough"
                 android:textSize="@dimen/text_size_40"
                 app:layout_constraintBottom_toTopOf="@id/tag_text_view"
@@ -211,7 +200,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:elevation="4dp"
-                android:text="@{movie.rated}"
                 android:textColor="@color/white"
                 android:textSize="@dimen/text_size_12"
                 app:layout_constraintBottom_toBottomOf="@id/pg_view"
@@ -254,5 +242,3 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
 
     </ScrollView>
-
-</layout>

@@ -17,7 +17,6 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:shapeAppearanceOverlay="@style/CornerImageView"
-        app:srcCompat="@drawable/actor1"
         tools:src="@drawable/ic_no_photo" />
 
     <TextView
@@ -26,7 +25,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/margin_6"
         android:maxLines="3"
-        android:text="@string/text_actor_one"
         android:textColor="@color/light_gray"
         android:textSize="@dimen/text_size_12"
         app:layout_constraintBottom_toBottomOf="parent"
