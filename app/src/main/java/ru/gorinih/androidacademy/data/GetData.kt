@@ -13,6 +13,6 @@ class GetData {
 
     suspend fun getMoviesById(context: Context, id: Int): Movies.Movie =
         withContext(Dispatchers.IO) {
-            loadMovies(context).firstOrNull { it.id == id }!!
+            loadMovies(context).first { it.id == id }
         }
 }

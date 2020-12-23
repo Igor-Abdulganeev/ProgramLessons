@@ -9,19 +9,21 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.cancel
+import kotlinx.coroutines.launch
 import ru.gorinih.androidacademy.adapter.ListMoviesRecyclerViewAdapter
+import ru.gorinih.androidacademy.data.GetData
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
 import ru.gorinih.androidacademy.model.Movies
-import ru.gorinih.androidacademy.data.GetData
 
 class FragmentMoviesList : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
     private var listenerClickFragment: ClickFragment? = null
-    private val job = Job()
-    private val scope = CoroutineScope(Dispatchers.Main + job)
+    private val scope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -57,17 +59,12 @@ class FragmentMoviesList : Fragment() {
         binding.listMovies.layoutManager = layoutManager
         binding.listMovies.adapter = adapter
         val context = requireContext()
-
         scope.launch {
             val listMoves = mutableListOf<Movies>()
             listMoves.add(Movies.Header)
             listMoves.addAll(GetData().getMovies(context))
             listMoves.let { adapter.submitList(it) }
         }
-/*
-        val listMoves = FakeMovies().getListMovies()
-        listMoves.let { adapter.submitList(it) }
-*/
     }
 
     override fun onAttach(context: Context) {
@@ -79,7 +76,7 @@ class FragmentMoviesList : Fragment() {
 
     override fun onDetach() {
         listenerClickFragment = null
-        //  job.cancel()
+        scope.cancel()
         super.onDetach()
     }
 
@@ -93,5 +90,9 @@ class FragmentMoviesList : Fragment() {
             Configuration.ORIENTATION_LANDSCAPE -> 3
             else -> 0
         }
+    }
+
+    companion object {
+        fun newInstance() = FragmentMoviesList()
     }
 }

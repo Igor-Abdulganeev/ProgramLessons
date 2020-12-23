@@ -15,7 +15,7 @@ class MainActivity : AppCompatActivity(), FragmentMoviesList.ClickFragment {
             supportFragmentManager.beginTransaction()
                 .replace(
                     R.id.fragment_ui,
-                    FragmentMoviesList(),
+                    FragmentMoviesList.newInstance(),
                     MOVIES_FRAGMENT_TAG
                 )
                 .commit()
