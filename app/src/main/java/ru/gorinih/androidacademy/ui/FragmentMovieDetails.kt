@@ -5,25 +5,28 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
-import kotlinx.coroutines.*
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.adapter.ListActorsRecyclerViewAdapter
-import ru.gorinih.androidacademy.data.GetData
+import ru.gorinih.androidacademy.data.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
-//import ru.gorinih.androidacademy.model.FakeMovies
-import ru.gorinih.androidacademy.model.Movies
+import ru.gorinih.androidacademy.model.MoviesViewModel
+import ru.gorinih.androidacademy.model.MoviesViewModelFactory
 
 class FragmentMovieDetails : Fragment() {
 
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private lateinit var viewModel: MoviesViewModel
+    private lateinit var viewModelFactory: MoviesViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -38,14 +41,16 @@ class FragmentMovieDetails : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val idMovie = requireNotNull(arguments?.getInt(ID_MOVIE))
 
-        scope.launch {
-            val movie = GetData().getMoviesById(requireContext(), idMovie)
-            showMovie(movie)
-        }
+        viewModelFactory = MoviesViewModelFactory(requireContext())
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MoviesViewModel::class.java)
+        viewModel.getMovieById(idMovie)
+        viewModel.movie.observe(viewLifecycleOwner, {
+            showMovie(it)
+        })
     }
 
     private fun showMovie(movie: Movies.Movie) {
-        binding.progressBar.visibility = View.VISIBLE
+        binding.progressBar.isVisible = true
         binding.descriptionTextView.text = movie.description
         binding.reviewsTextView.text =
             resources.getString(R.string.reviews_text, movie.reviews.toString())
@@ -54,7 +59,7 @@ class FragmentMovieDetails : Fragment() {
             movie.listOfGenre.map { it.nameGenre }.sorted().joinToString(separator = ", ")
         binding.nameMovieTextView.text = movie.nameMovie
         Glide.with(requireContext())
-            .load(movie.detailPoster)
+            .load(movie.detailPoster + "5")
             .placeholder(R.drawable.ic_no_image)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
@@ -63,6 +68,7 @@ class FragmentMovieDetails : Fragment() {
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    binding.progressBar.visibility = View.GONE
                     return false
                 }
 
@@ -88,7 +94,6 @@ class FragmentMovieDetails : Fragment() {
 
     override fun onDestroy() {
         _binding = null
-        scope.cancel()
         super.onDestroy()
     }
 

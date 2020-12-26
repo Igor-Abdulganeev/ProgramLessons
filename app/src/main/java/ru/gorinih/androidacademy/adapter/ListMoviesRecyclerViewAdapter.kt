@@ -2,7 +2,7 @@ package ru.gorinih.androidacademy.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import ru.gorinih.androidacademy.model.Movies
+import ru.gorinih.androidacademy.data.Movies
 
 class ListMoviesRecyclerViewAdapter(private val listener: (Int) -> Unit) :
     ListAdapter<Movies, ListMoviesViewHolder>(ListMoviesDiffUtils()) {

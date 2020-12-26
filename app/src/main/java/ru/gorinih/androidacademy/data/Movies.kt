@@ -1,4 +1,4 @@
-package ru.gorinih.androidacademy.model
+package ru.gorinih.androidacademy.data
 
 /**
  * Модель фильма

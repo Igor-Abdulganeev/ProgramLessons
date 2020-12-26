@@ -6,24 +6,23 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.launch
 import ru.gorinih.androidacademy.adapter.ListMoviesRecyclerViewAdapter
-import ru.gorinih.androidacademy.data.GetData
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
-import ru.gorinih.androidacademy.model.Movies
+import ru.gorinih.androidacademy.model.MoviesViewModel
+import ru.gorinih.androidacademy.model.MoviesViewModelFactory
 
 class FragmentMoviesList : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
     private var listenerClickFragment: ClickFragment? = null
-    private val scope = CoroutineScope(Dispatchers.Main)
+    private lateinit var viewModel: MoviesViewModel
+    private lateinit var viewModelFactory: MoviesViewModelFactory
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,6 +44,9 @@ class FragmentMoviesList : Fragment() {
         val adapter = ListMoviesRecyclerViewAdapter {
             listenerClickFragment?.onMovieClick(it)
         }
+        viewModelFactory = MoviesViewModelFactory(requireContext())
+        viewModel = ViewModelProvider(this, viewModelFactory).get(MoviesViewModel::class.java)
+
         val spanCount = getSpanCount()
         val layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false)
         layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
@@ -58,13 +60,10 @@ class FragmentMoviesList : Fragment() {
         }
         binding.listMovies.layoutManager = layoutManager
         binding.listMovies.adapter = adapter
-        val context = requireContext()
-        scope.launch {
-            val listMoves = mutableListOf<Movies>()
-            listMoves.add(Movies.Header)
-            listMoves.addAll(GetData().getMovies(context))
-            listMoves.let { adapter.submitList(it) }
-        }
+
+        viewModel.movieList.observe(viewLifecycleOwner, {
+            adapter.submitList(it)
+        })
     }
 
     override fun onAttach(context: Context) {
@@ -76,7 +75,6 @@ class FragmentMoviesList : Fragment() {
 
     override fun onDetach() {
         listenerClickFragment = null
-        scope.cancel()
         super.onDetach()
     }
 
