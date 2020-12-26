@@ -59,7 +59,7 @@ class FragmentMovieDetails : Fragment() {
             movie.listOfGenre.map { it.nameGenre }.sorted().joinToString(separator = ", ")
         binding.nameMovieTextView.text = movie.nameMovie
         Glide.with(requireContext())
-            .load(movie.detailPoster + "5")
+            .load(movie.detailPoster)
             .placeholder(R.drawable.ic_no_image)
             .listener(object : RequestListener<Drawable> {
                 override fun onLoadFailed(
