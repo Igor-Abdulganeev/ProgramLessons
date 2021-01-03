@@ -1,4 +1,4 @@
-package ru.gorinih.androidacademy.repository
+package ru.gorinih.androidacademy.data.repository
 
 import android.content.Context
 import kotlinx.coroutines.Dispatchers
@@ -7,7 +7,7 @@ import kotlinx.coroutines.withContext
 import ru.gorinih.androidacademy.data.Movies
 import ru.gorinih.androidacademy.data.loadMovies
 
-class MoviesInteractor(private val context: Context) {
+class MovieStorage(private val context: Context) {
     suspend fun getMovies(): List<Movies.Movie> =
         withContext(Dispatchers.IO) {
             loadMovies(context)

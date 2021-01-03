@@ -1,14 +1,27 @@
-package ru.gorinih.androidacademy.model
+package ru.gorinih.androidacademy.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import ru.gorinih.androidacademy.data.Movies
-import ru.gorinih.androidacademy.repository.MoviesInteractor
+import ru.gorinih.androidacademy.data.repository.MoviesInteractor
+import kotlin.coroutines.CoroutineContext
 
 class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewModel() {
+
+    private val exceptionMovie =
+        CoroutineExceptionHandler { coroutineContext: CoroutineContext, throwable: Throwable ->
+            val isActive = coroutineContext.isActive
+            Log.e(
+                "MoviesViewModel::class",
+                "ExceptionHandler [Scope active:$isActive, canceledContext:$throwable]"
+            )
+        }
 
     private var _movieList = MutableLiveData<List<Movies>>()
     val movieList: LiveData<List<Movies>>
@@ -23,32 +36,11 @@ class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewMode
     }
 
     private fun getMoviesList() {
-        viewModelScope.launch {
+        viewModelScope.launch(exceptionMovie) {
             val movies = mutableListOf<Movies>(Movies.Header)
             val newMoviesList = moviesInteractor.getMovies()
             movies.addAll(newMoviesList)
             _movieList.value = movies
         }
     }
-
-    private fun getMovieByIdInScope(id: Int) {
-        viewModelScope.launch {
-            val movieById = moviesInteractor.getMoviesById(id)
-            _movie.value = movieById
-        }
-    }
-
-    fun getMovieById(id: Int) {
-        getMovieByIdInScope(id) // getMovieByIdInList(id)
-    }
-
-    // ARN
-    private fun getMovieByIdInList(id: Int) {
-        viewModelScope.launch {
-            val movieById =
-                _movieList.value!!.filterIsInstance(Movies.Movie::class.java).first { it.id == id }
-            _movie.value = movieById
-        }
-    }
-
 }

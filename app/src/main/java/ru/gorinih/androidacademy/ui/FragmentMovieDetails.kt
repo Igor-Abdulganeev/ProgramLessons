@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -18,15 +17,16 @@ import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.adapter.ListActorsRecyclerViewAdapter
 import ru.gorinih.androidacademy.data.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
-import ru.gorinih.androidacademy.model.MoviesViewModel
-import ru.gorinih.androidacademy.model.MoviesViewModelFactory
+import ru.gorinih.androidacademy.viewmodel.DetailsMovieViewModel
+import ru.gorinih.androidacademy.viewmodel.DetailsMovieViewModelFactory
+import ru.gorinih.androidacademy.viewmodel.MoviesViewModel
+import ru.gorinih.androidacademy.viewmodel.MoviesViewModelFactory
 
 class FragmentMovieDetails : Fragment() {
 
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
-    private lateinit var viewModel: MoviesViewModel
-    private lateinit var viewModelFactory: MoviesViewModelFactory
+    private lateinit var viewModel: DetailsMovieViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -40,13 +40,12 @@ class FragmentMovieDetails : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val idMovie = requireNotNull(arguments?.getInt(ID_MOVIE))
-
-        viewModelFactory = MoviesViewModelFactory(requireContext())
-        viewModel = ViewModelProvider(this, viewModelFactory).get(MoviesViewModel::class.java)
-        viewModel.getMovieById(idMovie)
+        val viewModelFactory = DetailsMovieViewModelFactory(requireContext())
+        viewModel = ViewModelProvider(this, viewModelFactory).get(DetailsMovieViewModel::class.java)
         viewModel.movie.observe(viewLifecycleOwner, {
             showMovie(it)
         })
+        viewModel.getMovieById(idMovie)
     }
 
     private fun showMovie(movie: Movies.Movie) {
