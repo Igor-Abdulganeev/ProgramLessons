@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import ru.gorinih.androidacademy.data.Movies
+import ru.gorinih.androidacademy.data.model.Movies
 import ru.gorinih.androidacademy.data.repository.MoviesInteractor
 
 class DetailsMovieViewModel(private val moviesInteractor: MoviesInteractor) : ViewModel() {
@@ -14,9 +14,12 @@ class DetailsMovieViewModel(private val moviesInteractor: MoviesInteractor) : Vi
     val movie: LiveData<Movies.Movie>
         get() = _movie
 
-    fun getMovieById(id: Int) {
+    fun getMovieById(net: Boolean, id: Int) {
         viewModelScope.launch {
-            val movieById = moviesInteractor.getMoviesById(id)
+            val movieById = when (net) {
+                true -> moviesInteractor.getMoviesByIdNet(id)
+                false -> moviesInteractor.getMoviesById(id)
+            }
             _movie.value = movieById
         }
     }

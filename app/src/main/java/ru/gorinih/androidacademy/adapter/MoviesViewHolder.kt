@@ -11,7 +11,7 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.databinding.ViewHolderMovieBinding
-import ru.gorinih.androidacademy.data.Movies
+import ru.gorinih.androidacademy.data.model.Movies
 
 class MoviesViewHolder private constructor(private val binding: ViewHolderMovieBinding) :
     ListMoviesViewHolder(binding.root) {

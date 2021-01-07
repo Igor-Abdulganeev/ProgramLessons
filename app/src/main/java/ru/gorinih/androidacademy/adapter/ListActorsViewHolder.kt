@@ -5,7 +5,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import ru.gorinih.androidacademy.R
-import ru.gorinih.androidacademy.data.Actor
+import ru.gorinih.androidacademy.data.model.Actor
 import ru.gorinih.androidacademy.databinding.ViewHolderActorBinding
 
 class ListActorsViewHolder private constructor(private val binding: ViewHolderActorBinding) :

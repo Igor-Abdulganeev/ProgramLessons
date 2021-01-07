@@ -26,5 +26,6 @@
     <string name="text_back">back</string>
     <string name="head_movies_list">Movies list</string>
     <string name="text_no_actor">No actor</string>
+    <string name="text_description_is_empty">"Описание отсутствует"</string>
     <!--End movie card -->
 </resources>

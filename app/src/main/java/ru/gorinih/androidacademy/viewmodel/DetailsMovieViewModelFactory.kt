@@ -3,6 +3,7 @@ package ru.gorinih.androidacademy.viewmodel
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import ru.gorinih.androidacademy.data.repository.MovieNetwork
 import ru.gorinih.androidacademy.data.repository.MovieStorage
 import ru.gorinih.androidacademy.data.repository.MoviesInteractor
 import java.lang.IllegalArgumentException

@@ -1,4 +1,7 @@
-package ru.gorinih.androidacademy.data
+package ru.gorinih.androidacademy.data.model
+
+import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
 /**
  * Модель фильма
@@ -17,18 +20,18 @@ package ru.gorinih.androidacademy.data
  */
 sealed class Movies {
     data class Movie(
-        val id: Int,
-        val nameMovie: String,
-        val duration: Int,
-        val reviews: Int,
-        val rating: Float,
-        val listOfGenre: List<Genre>,
-        val rated: String,
-        val like: Boolean,
-        val detailPoster: String,
-        val poster: String,
-        val description: String,
-        val listOfActors: List<Actor>
+        val id: Int = 0,
+        val nameMovie: String = "",
+        val duration: Int = 0,
+        val reviews: Int = 0,
+        val rating: Float = 0.0F,
+        val listOfGenre: List<Genre> = listOf(),
+        val rated: String = "",
+        val like: Boolean = false,
+        val detailPoster: String = "",
+        val poster: String = "",
+        val description: String = "",
+        val listOfActors: List<Actor> = listOf()
     ) : Movies()
 
     object Header : Movies()
@@ -41,9 +44,9 @@ sealed class Movies {
  * @property @photoActor Ссылка на фото актера
  */
 data class Actor(
-    val id: Int,
-    val nameActor: String,
-    val photoActor: String
+    val id: Int = 0,
+    val nameActor: String = "",
+    val photoActor: String = ""
 )
 
 /**
@@ -51,7 +54,10 @@ data class Actor(
  * @property @id Идентификатор
  * @property @nameGenre Наименование жанра
  */
+@Serializable
 data class Genre(
-    val id: Int,
-    val nameGenre: String
+    @SerialName("id")
+    val id: Int = 0,
+    @SerialName("name")
+    val nameGenre: String = ""
 )

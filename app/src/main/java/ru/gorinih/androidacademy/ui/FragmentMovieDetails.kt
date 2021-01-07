@@ -15,12 +15,10 @@ import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.adapter.ListActorsRecyclerViewAdapter
-import ru.gorinih.androidacademy.data.Movies
+import ru.gorinih.androidacademy.data.model.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
 import ru.gorinih.androidacademy.viewmodel.DetailsMovieViewModel
 import ru.gorinih.androidacademy.viewmodel.DetailsMovieViewModelFactory
-import ru.gorinih.androidacademy.viewmodel.MoviesViewModel
-import ru.gorinih.androidacademy.viewmodel.MoviesViewModelFactory
 
 class FragmentMovieDetails : Fragment() {
 
@@ -45,7 +43,7 @@ class FragmentMovieDetails : Fragment() {
         viewModel.movie.observe(viewLifecycleOwner, {
             showMovie(it)
         })
-        viewModel.getMovieById(idMovie)
+        viewModel.getMovieById(true, idMovie)
     }
 
     private fun showMovie(movie: Movies.Movie) {

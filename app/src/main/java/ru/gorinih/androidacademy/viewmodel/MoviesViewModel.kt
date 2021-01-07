@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
-import ru.gorinih.androidacademy.data.Movies
+import ru.gorinih.androidacademy.data.model.Movies
 import ru.gorinih.androidacademy.data.repository.MoviesInteractor
 import kotlin.coroutines.CoroutineContext
 
@@ -32,13 +32,16 @@ class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewMode
         get() = _movie
 
     init {
-        getMoviesList()
+        getMoviesList(true, 1)
     }
 
-    private fun getMoviesList() {
+    private fun getMoviesList(net: Boolean, numberPage: Int) {
         viewModelScope.launch(exceptionMovie) {
             val movies = mutableListOf<Movies>(Movies.Header)
-            val newMoviesList = moviesInteractor.getMovies()
+            val newMoviesList = when (net) {
+                false -> moviesInteractor.getMovies()
+                true -> moviesInteractor.getMoviesNet(numberPage)
+            }
             movies.addAll(newMoviesList)
             _movieList.value = movies
         }

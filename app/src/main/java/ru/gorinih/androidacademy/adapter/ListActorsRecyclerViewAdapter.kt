@@ -2,7 +2,7 @@ package ru.gorinih.androidacademy.adapter
 
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
-import ru.gorinih.androidacademy.data.Actor
+import ru.gorinih.androidacademy.data.model.Actor
 
 class ListActorsRecyclerViewAdapter :
     ListAdapter<Actor, ListActorsViewHolder>(ListActorsDiffUtils()) {
