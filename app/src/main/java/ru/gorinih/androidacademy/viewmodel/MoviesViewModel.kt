@@ -14,6 +14,7 @@ import kotlin.coroutines.CoroutineContext
 
 class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewModel() {
 
+    private var page: Int = 1
     private val exceptionMovie =
         CoroutineExceptionHandler { coroutineContext: CoroutineContext, throwable: Throwable ->
             val isActive = coroutineContext.isActive
@@ -32,12 +33,14 @@ class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewMode
         get() = _movie
 
     init {
-        getMoviesList(true, 1)
+        getMoviesList(true, page)
     }
 
     private fun getMoviesList(net: Boolean, numberPage: Int) {
         viewModelScope.launch(exceptionMovie) {
-            val movies = mutableListOf<Movies>(Movies.Header)
+            val movies = mutableListOf<Movies>()
+            val oldMovies = movieList.value ?: listOf(Movies.Header)
+            movies.addAll(oldMovies)
             val newMoviesList = when (net) {
                 false -> moviesInteractor.getMovies()
                 true -> moviesInteractor.getMoviesNet(numberPage)
@@ -45,5 +48,10 @@ class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewMode
             movies.addAll(newMoviesList)
             _movieList.value = movies
         }
+    }
+
+    fun nextMovies() {
+        page++
+        getMoviesList(true, page)
     }
 }

@@ -15,7 +15,7 @@ import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
 import ru.gorinih.androidacademy.viewmodel.MoviesViewModel
 import ru.gorinih.androidacademy.viewmodel.MoviesViewModelFactory
 
-class FragmentMoviesList : Fragment() {
+class FragmentMoviesList : Fragment(), ListMoviesScrollListener.AddNewList {
 
     private var _binding: FragmentMoviesListBinding? = null
     private val binding get() = _binding!!
@@ -61,6 +61,13 @@ class FragmentMoviesList : Fragment() {
         viewModel.movieList.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
+        binding.listMovies.addOnScrollListener(
+            ListMoviesScrollListener(
+                context = this,
+                expectedVisibleThreshold = 6
+            )
+        )
+
     }
 
     override fun onAttach(context: Context) {
@@ -90,4 +97,9 @@ class FragmentMoviesList : Fragment() {
     interface ClickFragment {
         fun onMovieClick(id: Int)
     }
+
+    override fun onAddMovies() {
+        viewModel.nextMovies()
+    }
+
 }

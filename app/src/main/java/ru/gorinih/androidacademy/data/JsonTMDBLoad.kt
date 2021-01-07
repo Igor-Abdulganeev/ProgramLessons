@@ -140,7 +140,7 @@ private suspend fun parserActors(actors: MovieActorsTmdb): List<Actor> {
         Actor(
             id = it.id,
             nameActor = it.originalName,
-            photoActor = it.profilePath.let { poster -> "${baseImageUrl}original${poster}" }
+            photoActor = it.profilePath.let { poster -> "${baseImageUrl}w185${poster}" }
         )
     }
 }
@@ -155,8 +155,8 @@ private suspend fun parseMovies(data: MoviesTmdb): List<Movies.Movie> {
             id = it.id,
             nameMovie = it.originalTitle,
             description = it.overview ?: "",
-            poster = it.posterPath.let { poster -> "${baseImageUrl}original${poster}" },
-            detailPoster = it.backdropPath.let { poster -> "${baseImageUrl}original${poster}" },
+            poster = it.posterPath.let { poster -> "${baseImageUrl}w342${poster}" },
+            detailPoster = it.backdropPath.let { poster -> "${baseImageUrl}w500${poster}" },
             rating = (it.voteAverage ?: 0.0F).toFloat(),
             reviews = it.voteCount ?: 0,
             rated = if (it.adult == true) "+16" else "+13",
@@ -178,8 +178,8 @@ private suspend fun parseMovieDetails(data: MovieDetailsTmdb): Movies.Movie {
         id = data.id,
         nameMovie = data.originalTitle,
         description = data.overview ?: "",
-        poster = data.posterPath.let { poster -> "${baseImageUrl}original${poster}" },
-        detailPoster = data.backdropPath.let { poster -> "${baseImageUrl}original${poster}" },
+        poster = data.posterPath.let { poster -> "${baseImageUrl}w342${poster}" },
+        detailPoster = data.backdropPath.let { poster -> "${baseImageUrl}w500${poster}" },
         rating = (data.voteAverage ?: 0.0F).toFloat(),
         reviews = data.voteCount ?: 0,
         rated = if (data.adult == true) "+16" else "+13",
