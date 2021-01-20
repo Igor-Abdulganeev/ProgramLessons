@@ -6,6 +6,7 @@
         android:angle="270"
         android:startColor="@color/gradient_sapphire_blue_one"
         android:endColor="@color/sapphire_blue_one" />
+
     <corners
         android:topRightRadius="@dimen/margin_8"
         android:topLeftRadius="@dimen/margin_8" />

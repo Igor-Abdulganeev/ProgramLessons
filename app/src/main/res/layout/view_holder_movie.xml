@@ -5,7 +5,8 @@
     android:id="@+id/constraint_movie_list"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginStart="@dimen/margin_14">
+    android:layout_margin="@dimen/margin_8"
+    android:background="@drawable/bg_corners_gradient_stroke">
 
     <ProgressBar
         android:id="@+id/progressBar"
@@ -17,16 +18,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent" />
-
-    <com.google.android.material.imageview.ShapeableImageView
-        android:id="@+id/mask_bottom_view"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:background="@drawable/bg_corners_gradient_stroke"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/movie_image_view" />
 
     <TextView
         android:id="@+id/minute_text_view"
@@ -67,11 +58,11 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="1dp"
-        android:layout_marginTop="@dimen/margin_30"
+        android:layout_marginTop="1dp"
         android:layout_marginEnd="1dp"
         android:layout_marginBottom="@dimen/margin_8"
-        android:background="@drawable/bg_corners_gradient_mask"
         android:scaleType="centerCrop"
+        android:background="@drawable/bg_corners_gradient_mask"
         app:layout_constraintBottom_toTopOf="@id/name_movie_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -79,7 +70,8 @@
         app:shapeAppearanceOverlay="@style/CornerImageView_6"
         tools:src="@drawable/ic_no_image" />
 
-    <com.google.android.material.imageview.ShapeableImageView
+
+    <ImageView
         android:id="@+id/mask_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -88,7 +80,8 @@
         app:layout_constraintBottom_toTopOf="@id/name_movie_text_view"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@id/movie_image_view" />
+        app:layout_constraintTop_toTopOf="parent" />
+
 
     <TextView
         android:id="@+id/reviews_text_view"

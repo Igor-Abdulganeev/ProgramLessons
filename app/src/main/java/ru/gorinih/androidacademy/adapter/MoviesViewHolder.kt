@@ -49,6 +49,7 @@ class MoviesViewHolder private constructor(private val binding: ViewHolderMovieB
                     target: Target<Drawable>?,
                     isFirstResource: Boolean
                 ): Boolean {
+                    binding.progressBar.isVisible = false
                     return false
                 }
 

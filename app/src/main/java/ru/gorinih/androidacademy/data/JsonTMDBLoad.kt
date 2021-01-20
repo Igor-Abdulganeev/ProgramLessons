@@ -79,13 +79,13 @@ fun handleCallError(throwable: Throwable) {
 }
 
 private interface APITmdbNowPlaying {
-    @GET("movie/now_playing?api_key=69f47bb575e0708f5804d2b046fcd103")
+    @GET("movie/now_playing?api_key=69f47bb575e0708f5804d2b046fcd103&language=ru")
     suspend fun getMoviesFromTmdb(@Query("page") numberPage: Int): MoviesTmdb
 
     @GET("genre/movie/list?api_key=69f47bb575e0708f5804d2b046fcd103")
     suspend fun getGenre(): GenreTmdb
 
-    @GET("movie/{id_movie}?api_key=69f47bb575e0708f5804d2b046fcd103")
+    @GET("movie/{id_movie}?api_key=69f47bb575e0708f5804d2b046fcd103&language=ru")
     suspend fun getMovieById(@Path("id_movie") idMovie: Int): MovieDetailsTmdb
 
     @GET("configuration?api_key=69f47bb575e0708f5804d2b046fcd103")
