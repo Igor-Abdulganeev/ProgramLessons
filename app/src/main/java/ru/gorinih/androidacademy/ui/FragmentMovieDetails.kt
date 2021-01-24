@@ -43,7 +43,7 @@ class FragmentMovieDetails : Fragment() {
         viewModel.movie.observe(viewLifecycleOwner, {
             showMovie(it)
         })
-        viewModel.getMovieById(true, idMovie)
+        viewModel.getMovie(idMovie)
     }
 
     private fun showMovie(movie: Movies.Movie) {

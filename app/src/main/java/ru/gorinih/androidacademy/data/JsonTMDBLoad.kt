@@ -22,16 +22,16 @@ internal suspend fun loadMovies(numberPage: Int): List<Movies.Movie> =
         val result = loadTmdbMovies(numberPage)?.let { it ->
             parseMovies(it)
         }
-        result ?: listOf(Movies.Movie())
+        result ?: emptyList()
     }
 
 
 @Suppress("unused")
-internal suspend fun loadMovieById(id: Int): Movies.Movie =
+internal suspend fun loadMovieById(id: Int): Movies.Movie? =
     withContext(Dispatchers.IO) {
         loadTmdbMovie(id)?.let { it ->
             parseMovieDetails(it)
-        } ?: Movies.Movie()
+        }// ?: Movies.Movie()
     }
 
 @ExperimentalSerializationApi
@@ -82,7 +82,7 @@ private interface APITmdbNowPlaying {
     @GET("movie/now_playing?api_key=69f47bb575e0708f5804d2b046fcd103&language=ru")
     suspend fun getMoviesFromTmdb(@Query("page") numberPage: Int): MoviesTmdb
 
-    @GET("genre/movie/list?api_key=69f47bb575e0708f5804d2b046fcd103")
+    @GET("genre/movie/list?api_key=69f47bb575e0708f5804d2b046fcd103&language=ru")
     suspend fun getGenre(): GenreTmdb
 
     @GET("movie/{id_movie}?api_key=69f47bb575e0708f5804d2b046fcd103&language=ru")
@@ -91,7 +91,7 @@ private interface APITmdbNowPlaying {
     @GET("configuration?api_key=69f47bb575e0708f5804d2b046fcd103")
     suspend fun getConfiguration(): ConfigurationTmdb
 
-    @GET("movie/{id_movie}/credits?api_key=69f47bb575e0708f5804d2b046fcd103")
+    @GET("movie/{id_movie}/credits?api_key=69f47bb575e0708f5804d2b046fcd103&language=ru")
     suspend fun getActors(@Path("id_movie") id_movie: Int): MovieActorsTmdb
 }
 

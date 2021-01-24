@@ -10,7 +10,9 @@ import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import kotlinx.coroutines.InternalCoroutinesApi
 import ru.gorinih.androidacademy.adapter.ListMoviesRecyclerViewAdapter
+import ru.gorinih.androidacademy.data.db.MoviesDatabase
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
 import ru.gorinih.androidacademy.viewmodel.MoviesViewModel
 import ru.gorinih.androidacademy.viewmodel.MoviesViewModelFactory
@@ -37,6 +39,7 @@ class FragmentMoviesList : Fragment(), ListMoviesScrollListener.AddNewList {
         super.onDestroyView()
     }
 
+    @InternalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val adapter = ListMoviesRecyclerViewAdapter {
@@ -67,7 +70,6 @@ class FragmentMoviesList : Fragment(), ListMoviesScrollListener.AddNewList {
                 expectedVisibleThreshold = 6
             )
         )
-
     }
 
     override fun onAttach(context: Context) {

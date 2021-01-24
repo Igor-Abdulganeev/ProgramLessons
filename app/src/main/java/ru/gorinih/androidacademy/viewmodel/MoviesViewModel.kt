@@ -6,15 +6,16 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import ru.gorinih.androidacademy.data.model.Movies
-import ru.gorinih.androidacademy.data.repository.MoviesInteractor
+import ru.gorinih.androidacademy.data.repository.MoviesRepository
 import kotlin.coroutines.CoroutineContext
 
-class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewModel() {
+class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
 
-    private var page: Int = 1
+    private var page: Int = 0
     private val exceptionMovie =
         CoroutineExceptionHandler { coroutineContext: CoroutineContext, throwable: Throwable ->
             val isActive = coroutineContext.isActive
@@ -28,30 +29,42 @@ class MoviesViewModel(private val moviesInteractor: MoviesInteractor) : ViewMode
     val movieList: LiveData<List<Movies>>
         get() = _movieList
 
-    private var _movie = MutableLiveData<Movies.Movie>()
-    val movie: LiveData<Movies.Movie>
-        get() = _movie
-
     init {
-        getMoviesList(true, page)
+        nextMovies()
     }
 
-    private fun getMoviesList(net: Boolean, numberPage: Int) {
+    private fun getMoviesList(numberPage: Int) {
         viewModelScope.launch(exceptionMovie) {
-            val movies = mutableListOf<Movies>()
+            val listMovies = mutableListOf<Movies>()
             val oldMovies = movieList.value ?: listOf(Movies.Header)
-            movies.addAll(oldMovies)
-            val newMoviesList = when (net) {
-                false -> moviesInteractor.getMovies()
-                true -> moviesInteractor.getMoviesNet(numberPage)
+            val listIdMovies = oldMovies.filterIsInstance(Movies.Movie::class.java).map { it.id }
+            listMovies.addAll(oldMovies)
+            val newMovies = moviesRepository.getMovies(numberPage, listIdMovies)
+            if (newMovies.isNotEmpty()) {
+                refreshCache(newMovies)
             }
-            movies.addAll(newMoviesList)
-            _movieList.value = movies
+            listMovies.addAll(newMovies)
+            _movieList.value = listMovies
+        }
+    }
+
+    private suspend fun refreshCache(listNewMovies: List<Movies.Movie>) {
+        viewModelScope.launch(Dispatchers.IO + exceptionMovie) {
+            val updateList = mutableListOf<Movies.Movie>()
+            listNewMovies.forEach {
+                val movie = moviesRepository.getMovieFromNetwork(it.id)
+                if (movie != null) {
+                    updateList.add(movie)
+                }
+            }
+            if (updateList.count() > 0)
+                moviesRepository.insertUpdateMovies(updateList)
         }
     }
 
     fun nextMovies() {
         page++
-        getMoviesList(true, page)
+        getMoviesList(page)
     }
+
 }
