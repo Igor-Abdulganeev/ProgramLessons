@@ -33,7 +33,7 @@ class MoviesViewHolder private constructor(private val binding: ViewHolderMovieB
             item.listOfGenre.map { it.nameGenre }.sorted().joinToString(separator = ", ")
         binding.pgTextView.text = item.rated
         binding.favorite.setImageResource(
-            if (item.like) {
+            if (item.likes) {
                 R.drawable.ic_favorite_red_24
             } else {
                 R.drawable.ic_favorite_gray_24

@@ -8,9 +8,14 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.InternalCoroutinesApi
+import kotlinx.coroutines.coroutineScope
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.adapter.ListMoviesRecyclerViewAdapter
 import ru.gorinih.androidacademy.data.db.MoviesDatabase
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
@@ -39,6 +44,7 @@ class FragmentMoviesList : Fragment(), ListMoviesScrollListener.AddNewList {
         super.onDestroyView()
     }
 
+    @ExperimentalSerializationApi
     @InternalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,9 +67,17 @@ class FragmentMoviesList : Fragment(), ListMoviesScrollListener.AddNewList {
         }
         binding.listMovies.layoutManager = layoutManager
         binding.listMovies.adapter = adapter
+/*
+        lifecycleScope.launch {
+            viewModel.flowMovie.collect {
+                adapter.submitList(it)
+            }
+        }
+*/
         viewModel.movieList.observe(viewLifecycleOwner, {
             adapter.submitList(it)
         })
+
         binding.listMovies.addOnScrollListener(
             ListMoviesScrollListener(
                 context = this,

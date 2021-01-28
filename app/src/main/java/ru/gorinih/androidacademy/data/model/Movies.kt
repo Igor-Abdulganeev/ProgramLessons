@@ -57,7 +57,7 @@ sealed class Movies {
         @ColumnInfo(name = "adult_rating")
         var rated: String = "",
         @ColumnInfo(name = "likes")
-        var like: Boolean = false,
+        var likes: Boolean = false,
         @ColumnInfo(name = "detail_poster_url")
         var detailPoster: String = "",
         @ColumnInfo(name = "main_poster_url")

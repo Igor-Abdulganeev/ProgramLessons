@@ -1,15 +1,18 @@
 package ru.gorinih.androidacademy.data.repository
 
+import androidx.lifecycle.LiveData
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.data.db.MoviesDao
 import ru.gorinih.androidacademy.data.model.Movies
 import ru.gorinih.androidacademy.data.model.RelationActorsOfMovie
 import ru.gorinih.androidacademy.data.model.RelationGenresOfMovie
 import ru.gorinih.androidacademy.data.model.TmpIdMovies
-import ru.gorinih.androidacademy.data.network.MovieNetwork
+import ru.gorinih.androidacademy.data.network.MoviesNetwork
 
-class MoviesRepository(private val movieDao: MoviesDao) {
-
-    private val dataNet = MovieNetwork()
+@ExperimentalSerializationApi
+class MoviesRepository(private val movieDao: MoviesDao, private val movieNetwork: MoviesNetwork) {
 
     private suspend fun insertIdMovies(ids: List<TmpIdMovies>) {
         movieDao.insertIdMovie(ids)
@@ -17,12 +20,12 @@ class MoviesRepository(private val movieDao: MoviesDao) {
 
     private suspend fun deleteIdMovies() = movieDao.deleteIdMovie()
 
-    suspend fun getMovieFromNetwork(id: Int): Movies.Movie? = dataNet.getMovieDetailsNet(id = id)
+    suspend fun getMovieFromNetwork(id: Int): Movies.Movie? = movieNetwork.getMovie(id = id)
 
     suspend fun insertUpdateMovies(items: List<Movies.Movie>) {
         movieDao.insertUpdateMovies(items = items)
         items.forEach {
-            val singleMovie = dataNet.getMovieDetailsNet(it.id)
+            val singleMovie = movieNetwork.getMovie(it.id)
             if (singleMovie != null) {
                 val movieGenres = singleMovie.listOfGenre.map { itGenre ->
                     RelationGenresOfMovie(
@@ -38,11 +41,13 @@ class MoviesRepository(private val movieDao: MoviesDao) {
                         actor_id = itActor.id
                     )
                 }
-                //TODO запараллелить
-                movieDao.insertGenres(singleMovie.listOfGenre)
-                movieDao.insertActors(singleMovie.listOfActors)
-                movieDao.insertGenresOfMovie(movieGenres)
-                movieDao.insertActorsOfMovie(movieActors)
+                coroutineScope {
+                    launch { movieDao.insertGenres(singleMovie.listOfGenre) }
+                    launch { movieDao.insertActors(singleMovie.listOfActors) }
+                    launch { movieDao.insertGenresOfMovie(movieGenres) }
+                    launch { movieDao.insertActorsOfMovie(movieActors) }
+                }
+
             }
         }
     }
@@ -51,13 +56,16 @@ class MoviesRepository(private val movieDao: MoviesDao) {
         return if (numberPage == 1) {
             val resultDb = getMoviesFromDatabase(listIdMovies = listIdMovies)
             if (resultDb.isEmpty()) getMoviesFromNetwork(numberPage = numberPage) else
-                return resultDb
+                if (resultDb.count() == 0) getMoviesFromNetwork(numberPage = numberPage) else
+                    return resultDb
         } else {
             val resultNet = getMoviesFromNetwork(numberPage = numberPage)
             if (resultNet.isEmpty()) getMoviesFromDatabase(listIdMovies = listIdMovies)
             else
                 return resultNet
         }
+
+
     }
 
     private suspend fun getMoviesFromDatabase(
@@ -71,6 +79,28 @@ class MoviesRepository(private val movieDao: MoviesDao) {
             if (idMovies.count() > 0) deleteIdMovies()
         } else
             list = movieDao.loadMoviesFromDBFirst()
+/*
+// Flow method (don`t work)
+        if (list.count()>0){
+            list.flatMapMerge {
+               flow {
+                   emit (it.forEach { itMovie ->
+                   itMovie.listOfGenre = movieDao.loadGenresById(itMovie.id) ?: emptyList()
+               })
+               }
+            }
+
+        }
+*/
+/*
+// LiveData method
+        if (list.value?.isNotEmpty() == true) {
+            list.value?.map {
+                it.listOfGenre = movieDao.loadGenresById(it.id) ?: emptyList()
+            }
+        }
+*/
+// Simple value method
         if (list.isNotEmpty()) {
             list.map { it ->
                 it.listOfGenre = movieDao.loadGenresById(it.id) ?: emptyList()
@@ -80,7 +110,7 @@ class MoviesRepository(private val movieDao: MoviesDao) {
     }
 
     private suspend fun getMoviesFromNetwork(numberPage: Int): List<Movies.Movie> =
-        dataNet.getMoviesNet(numberPage = numberPage)
+        movieNetwork.getMovies(numberPage = numberPage)
 
     suspend fun getMovie(idMove: Int): Movies.Movie? {
         val movie = movieDao.loadMovieFromDB(idMovie = idMove)
