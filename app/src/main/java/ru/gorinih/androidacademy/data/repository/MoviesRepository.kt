@@ -1,14 +1,17 @@
 package ru.gorinih.androidacademy.data.repository
 
-import androidx.lifecycle.LiveData
+import androidx.paging.Pager
+import androidx.paging.PagingConfig
+import androidx.paging.PagingData
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.serialization.ExperimentalSerializationApi
+import ru.gorinih.androidacademy.data.MoviesPagingSource
 import ru.gorinih.androidacademy.data.db.MoviesDao
-import ru.gorinih.androidacademy.data.model.Movies
-import ru.gorinih.androidacademy.data.model.RelationActorsOfMovie
-import ru.gorinih.androidacademy.data.model.RelationGenresOfMovie
-import ru.gorinih.androidacademy.data.model.TmpIdMovies
+import ru.gorinih.androidacademy.data.models.Movies
+import ru.gorinih.androidacademy.data.models.RelationActorsOfMovie
+import ru.gorinih.androidacademy.data.models.RelationGenresOfMovie
+import ru.gorinih.androidacademy.data.models.TmpIdMovies
 import ru.gorinih.androidacademy.data.network.MoviesNetwork
 
 @ExperimentalSerializationApi
@@ -64,8 +67,17 @@ class MoviesRepository(private val movieDao: MoviesDao, private val movieNetwork
             else
                 return resultNet
         }
+    }
 
-
+    @InternalCoroutinesApi
+    fun getPageMovie(): Flow<PagingData<Movies>> {
+        return Pager(
+            config = PagingConfig(
+                pageSize = 20,
+                enablePlaceholders = false
+            ),
+            pagingSourceFactory = { MoviesPagingSource.newInstance(movieNetwork) }
+        ).flow
     }
 
     private suspend fun getMoviesFromDatabase(

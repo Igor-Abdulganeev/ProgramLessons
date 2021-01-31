@@ -6,7 +6,7 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.internal.synchronized
-import ru.gorinih.androidacademy.data.model.*
+import ru.gorinih.androidacademy.data.models.*
 
 @Database(
     entities = [Movies.Movie::class, Actor::class, Genre::class, RelationActorsOfMovie::class, RelationGenresOfMovie::class, TmpIdMovies::class],

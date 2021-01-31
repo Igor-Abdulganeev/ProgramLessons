@@ -31,4 +31,10 @@
     <dimen name="text_size_40">40sp</dimen>
     <dimen name="text_size_20">20sp</dimen>
     <!-- End text size -->
+
+    <!-- Start GridLayoutManager view -->
+    <integer name="count_portrait_column">2</integer>
+    <integer name="count_landscape_column">3</integer>
+    <!-- End GridLayoutManager view -->
+
 </resources>

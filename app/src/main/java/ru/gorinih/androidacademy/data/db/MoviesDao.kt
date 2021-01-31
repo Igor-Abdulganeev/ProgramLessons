@@ -1,9 +1,7 @@
 package ru.gorinih.androidacademy.data.db
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
-import kotlinx.coroutines.flow.Flow
-import ru.gorinih.androidacademy.data.model.*
+import ru.gorinih.androidacademy.data.models.*
 
 @Dao
 interface MoviesDao {

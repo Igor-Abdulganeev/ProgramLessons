@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
-import ru.gorinih.androidacademy.data.model.*
+import ru.gorinih.androidacademy.data.models.*
 
 interface MoviesApi {
     @GET("configuration?api_key=69f47bb575e0708f5804d2b046fcd103")

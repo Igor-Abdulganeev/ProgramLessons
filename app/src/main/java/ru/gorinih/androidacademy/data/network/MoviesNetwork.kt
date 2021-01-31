@@ -4,7 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
 import kotlinx.serialization.ExperimentalSerializationApi
-import ru.gorinih.androidacademy.data.model.*
+import ru.gorinih.androidacademy.data.models.*
 import java.io.IOException
 
 
