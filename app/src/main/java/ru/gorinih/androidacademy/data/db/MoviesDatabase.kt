@@ -1,4 +1,5 @@
 package ru.gorinih.androidacademy.data.db
+/*
 
 import android.content.Context
 import androidx.room.Database
@@ -32,4 +33,4 @@ abstract class MoviesDatabase : RoomDatabase() {
         ).fallbackToDestructiveMigration()
             .build()
     }
-}
+}*/

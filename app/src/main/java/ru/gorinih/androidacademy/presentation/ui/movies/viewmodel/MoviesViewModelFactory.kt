@@ -1,27 +1,27 @@
 package ru.gorinih.androidacademy.presentation.ui.movies.viewmodel
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
-import ru.gorinih.androidacademy.data.db.MoviesDatabase
-import ru.gorinih.androidacademy.data.network.MoviesApi
-import ru.gorinih.androidacademy.data.network.MoviesNetwork
 import ru.gorinih.androidacademy.data.repository.MoviesRepository
+import ru.gorinih.androidacademy.data.network.MoviesApi
+import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesPagingSource
 import java.lang.IllegalArgumentException
 
-@Suppress("UNCHECKED_CAST")
-class MoviesViewModelFactory(private val context: Context) : ViewModelProvider.Factory {
-    @ExperimentalSerializationApi
-    @InternalCoroutinesApi
-    override fun <T : ViewModel?> create(modelClass: Class<T>): T {
-        if (modelClass.isAssignableFrom(MoviesViewModel::class.java)) {
-            val movieDB = MoviesDatabase.newInstance(context)
-            val movieNetwork = MoviesNetwork(MoviesApi.newInstance())
-            val movieRepository = MoviesRepository(movieDB.moviesDao, movieNetwork)
-            return MoviesViewModel(movieRepository) as T
+@FlowPreview
+@InternalCoroutinesApi
+@ExperimentalSerializationApi
+class MoviesViewModelFactory : ViewModelProvider.Factory {
+
+    override fun <T : ViewModel?> create(modelClass: Class<T>): T = when (modelClass) {
+        MoviesViewModel::class.java -> {
+            val movieApi = MoviesApi.newInstance()
+            val moviePaging = MoviesPagingSource(movieApi)
+            val movieRepository = MoviesRepository(moviesPaging = moviePaging)
+            MoviesViewModel(movieRepository)
         }
-        throw IllegalArgumentException("Not found MoviesViewModel")
-    }
+        else -> IllegalArgumentException("Not found MoviesViewModel")
+    } as T
 }

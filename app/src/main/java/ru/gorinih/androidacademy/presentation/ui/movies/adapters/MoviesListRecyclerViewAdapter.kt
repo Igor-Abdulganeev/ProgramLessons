@@ -1,4 +1,4 @@
-package ru.gorinih.androidacademy.presentation.ui.movies.adapter
+package ru.gorinih.androidacademy.presentation.ui.movies.adapters
 
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter

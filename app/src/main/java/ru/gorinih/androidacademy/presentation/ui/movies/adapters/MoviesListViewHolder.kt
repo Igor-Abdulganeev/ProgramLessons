@@ -1,9 +1,9 @@
-package ru.gorinih.androidacademy.presentation.ui.movies.adapter
+package ru.gorinih.androidacademy.presentation.ui.movies.adapters
 
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import ru.gorinih.androidacademy.presentation.ui.movies.adapter.MoviesListRecyclerViewAdapter.Companion.TYPE_HEADER
+import ru.gorinih.androidacademy.presentation.ui.movies.adapters.MoviesListRecyclerViewAdapter.Companion.TYPE_HEADER
 
 abstract class MoviesListViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 

@@ -1,7 +1,12 @@
 package ru.gorinih.androidacademy.presentation
 
+import android.opengl.Visibility
 import android.os.Bundle
+import android.view.View
+import android.widget.Button
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import com.google.android.material.imageview.ShapeableImageView
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -42,7 +47,7 @@ class MainActivity : AppCompatActivity(), ClickFragment {
     }
 
     companion object {
-        const val MOVIES_FRAGMENT_TAG = "movies.fragment.tag"
-        const val MOVIE_FRAGMENT_TAG = "movie.fragment.tag"
+        const val MOVIES_FRAGMENT_TAG = "MoviesListFragment"
+        const val MOVIE_FRAGMENT_TAG = "MovieDetailsFragment"
     }
 }

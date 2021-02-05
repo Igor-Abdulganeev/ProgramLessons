@@ -13,8 +13,8 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.R
-import ru.gorinih.androidacademy.presentation.ui.movie.adapter.ActorsListRecyclerViewAdapter
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
 import ru.gorinih.androidacademy.presentation.ui.movie.viewmodel.MovieDetailsViewModel
@@ -24,6 +24,7 @@ class MovieDetailsFragment : Fragment() {
 
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
+
     private lateinit var detailsViewModel: MovieDetailsViewModel
 
     override fun onCreateView(
@@ -35,16 +36,23 @@ class MovieDetailsFragment : Fragment() {
             binding.root
         }
 
+    @ExperimentalSerializationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val idMovie = requireNotNull(arguments?.getInt(ID_MOVIE))
-        val viewModelFactory = MovieDetailsViewModelFactory(requireContext())
-        detailsViewModel =
-            ViewModelProvider(this, viewModelFactory).get(MovieDetailsViewModel::class.java)
+        detailsViewModel = ViewModelProvider(
+            this,
+            MovieDetailsViewModelFactory()
+        ).get(MovieDetailsViewModel::class.java)
         detailsViewModel.movie.observe(viewLifecycleOwner, {
             showMovie(it)
         })
         detailsViewModel.getMovie(idMovie)
+    }
+
+    override fun onDestroy() {
+        _binding = null
+        super.onDestroy()
     }
 
     private fun showMovie(movie: Movies.Movie) {
@@ -83,16 +91,13 @@ class MovieDetailsFragment : Fragment() {
             })
             .into(binding.movieImageView)
         binding.pgTextView.text = movie.rated
+/*
         val actors = movie.listOfActors
         val adapter = ActorsListRecyclerViewAdapter()
         binding.listActors.adapter = adapter
         actors.let { adapter.submitList(it) }
+*/
         binding.backTextView.setOnClickListener { activity?.onBackPressed() }
-    }
-
-    override fun onDestroy() {
-        _binding = null
-        super.onDestroy()
     }
 
     companion object {

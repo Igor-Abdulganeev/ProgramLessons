@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.data.db
 
+/*
 import androidx.room.*
 import ru.gorinih.androidacademy.data.models.*
 
@@ -54,3 +55,4 @@ interface MoviesDao {
     @Query("DELETE FROM tmp_id_movies")
     suspend fun deleteIdMovie()
 }
+*/

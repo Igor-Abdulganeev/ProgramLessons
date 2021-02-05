@@ -5,20 +5,17 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
-import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.data.models.Movies
-import ru.gorinih.androidacademy.data.repository.MoviesRepository
+import ru.gorinih.androidacademy.data.repository.MovieRepository
 
-class MovieDetailsViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
-
+class MovieDetailsViewModel(private val movieRepository: MovieRepository) : ViewModel() {
     private var _movie = MutableLiveData<Movies.Movie>()
     val movie: LiveData<Movies.Movie>
         get() = _movie
 
-    @ExperimentalSerializationApi
     fun getMovie(idMove: Int) {
         viewModelScope.launch {
-            val movie = moviesRepository.getMovie(idMove)
+            val movie = movieRepository.loadMovie(idMove)
             if (movie != null) {
                 _movie.value = movie
             }

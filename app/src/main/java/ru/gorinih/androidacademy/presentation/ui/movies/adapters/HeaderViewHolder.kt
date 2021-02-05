@@ -1,4 +1,4 @@
-package ru.gorinih.androidacademy.presentation.ui.movies.adapter
+package ru.gorinih.androidacademy.presentation.ui.movies.adapters
 
 import android.view.LayoutInflater
 import android.view.View
@@ -11,7 +11,7 @@ class HeaderViewHolder private constructor(view: View) : MoviesListViewHolder(vi
         fun from(parent: ViewGroup): MoviesListViewHolder {
             return HeaderViewHolder(
                 LayoutInflater.from(parent.context)
-                    .inflate(R.layout.header_view_holder_item, parent, false)
+                    .inflate(R.layout.header_item_view_holder, parent, false)
             )
         }
     }

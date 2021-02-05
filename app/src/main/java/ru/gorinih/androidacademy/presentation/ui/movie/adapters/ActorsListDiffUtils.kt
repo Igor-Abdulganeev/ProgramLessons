@@ -1,4 +1,4 @@
-package ru.gorinih.androidacademy.presentation.ui.movie.adapter
+package ru.gorinih.androidacademy.presentation.ui.movie.adapters
 
 import androidx.recyclerview.widget.DiffUtil
 import ru.gorinih.androidacademy.data.models.Actor
