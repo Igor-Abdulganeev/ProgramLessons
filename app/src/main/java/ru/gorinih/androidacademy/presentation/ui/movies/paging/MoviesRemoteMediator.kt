@@ -122,12 +122,11 @@ class MoviesRemoteMediator(
     }
 
     private suspend fun getRemoteKeyForLastItem(loadState: PagingState<Int, Movies.Movie>): RemoteKeys? {
-        val newKeys = loadState.pages.lastOrNull {
+        return loadState.pages.lastOrNull {
             it.data.isNotEmpty()
         }?.data?.lastOrNull()?.let {
             moviesDatabase.remoteKeysDao.remoteKeysById((it as Movies.Movie).id)
         }
-        return newKeys
     }
 
     private suspend fun getRemoteKeyForFirstItem(loadState: PagingState<Int, Movies.Movie>): RemoteKeys? {

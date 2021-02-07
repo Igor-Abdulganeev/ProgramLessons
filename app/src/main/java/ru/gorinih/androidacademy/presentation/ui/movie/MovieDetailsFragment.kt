@@ -13,6 +13,7 @@ import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.data.models.Movies
@@ -37,13 +38,15 @@ class MovieDetailsFragment : Fragment() {
             binding.root
         }
 
+    @ExperimentalStdlibApi
+    @InternalCoroutinesApi
     @ExperimentalSerializationApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val idMovie = requireNotNull(arguments?.getInt(ID_MOVIE))
         detailsViewModel = ViewModelProvider(
             this,
-            MovieDetailsViewModelFactory()
+            MovieDetailsViewModelFactory(requireContext())
         ).get(MovieDetailsViewModel::class.java)
         detailsViewModel.movie.observe(viewLifecycleOwner, {
             showMovie(it)

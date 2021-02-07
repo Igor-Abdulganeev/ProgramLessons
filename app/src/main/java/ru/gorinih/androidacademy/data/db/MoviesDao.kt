@@ -17,9 +17,13 @@ interface MoviesDao {
     @Insert
     suspend fun insertGenresOfMovie(items: List<RelationGenresOfMovie>)
 
-    /*
+    @Insert
+    suspend fun insertActorsOfMovie(items: List<RelationActorsOfMovie>)
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertActors(items: List<Actor>)
+
+    /*
 
     @Insert
     suspend fun insertActorsOfMovie(items: List<RelationActorsOfMovie>)
@@ -35,9 +39,19 @@ interface MoviesDao {
     fun loadMoviesFromDB(): PagingSource<Int, Movies.Movie>
 
     @Query(
-        "SELECT * FROM genres WHERE id IN (SELECT id_genre FROM relation_genres_of_movie WHERE id_movie = :id_movie)"
+        "SELECT * FROM genres WHERE id IN (SELECT id_genre FROM relation_genres_of_movie WHERE id_movie = :idMovie)"
     )
-    suspend fun loadGenresById(id_movie: Int): List<Genre>?
+    suspend fun loadGenresById(idMovie: Int): List<Genre>?
+
+    @Query(
+        "SELECT * FROM MOVIES WHERE id = :idMovie LIMIT 1"
+    )
+    suspend fun loadMovieFromDB(idMovie: Int): Movies.Movie?
+
+    @Query(
+        "SELECT * FROM actors WHERE id IN (SELECT id_actor FROM relation_actors_of_movie WHERE id_movie = :idMovie)"
+    )
+    suspend fun loadActorsById(idMovie: Int): List<Actor>?
 
     @Query(
         "DELETE FROM movies"
@@ -49,10 +63,6 @@ interface MoviesDao {
     )
     suspend fun loadActorsById(id_movie: Int): List<Actor>?
 
-    @Query(
-        "SELECT * FROM MOVIES WHERE id = :idMovie LIMIT 1"
-    )
-    suspend fun loadMovieFromDB(idMovie: Int): Movies.Movie?
 
     //--------tmp-------//
 

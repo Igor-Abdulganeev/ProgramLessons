@@ -13,11 +13,17 @@ class MovieDetailsViewModel(private val movieRepository: MovieRepository) : View
     val movie: LiveData<Movies.Movie>
         get() = _movie
 
+    @ExperimentalStdlibApi
     fun getMovie(idMove: Int) {
         viewModelScope.launch {
-            val movie = movieRepository.loadMovie(idMove)
-            if (movie != null) {
+            val movie: Movies.Movie? = movieRepository.loadMovie(idMove)
+            movie?.let {
                 _movie.value = movie
+                if (movie.listOfActors.isEmpty()) {
+                    val newMovie: Movies.Movie? = movieRepository.loadMovie(idMove)
+                    newMovie?.let { _movie.value = newMovie }
+                }
+
             }
         }
     }

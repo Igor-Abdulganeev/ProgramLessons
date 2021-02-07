@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.R
-import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
 import ru.gorinih.androidacademy.presentation.ui.movies.adapters.MoviesListRecyclerViewAdapter
 import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesLoadStateAdapter
