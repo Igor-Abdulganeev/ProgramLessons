@@ -28,5 +28,6 @@
     <string name="text_no_actor">No actor</string>
     <string name="text_description_is_empty">"Описание отсутствует"</string>
     <string name="retry_load_movies_button">повторить</string>
+    <string name="text_retry_button">Обновить</string>
     <!--End movie card -->
 </resources>

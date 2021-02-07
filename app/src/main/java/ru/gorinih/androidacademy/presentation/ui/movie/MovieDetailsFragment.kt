@@ -17,6 +17,7 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
+import ru.gorinih.androidacademy.presentation.ui.movie.adapters.ActorsListRecyclerViewAdapter
 import ru.gorinih.androidacademy.presentation.ui.movie.viewmodel.MovieDetailsViewModel
 import ru.gorinih.androidacademy.presentation.ui.movie.viewmodel.MovieDetailsViewModelFactory
 
@@ -91,12 +92,10 @@ class MovieDetailsFragment : Fragment() {
             })
             .into(binding.movieImageView)
         binding.pgTextView.text = movie.rated
-/*
         val actors = movie.listOfActors
         val adapter = ActorsListRecyclerViewAdapter()
         binding.listActors.adapter = adapter
         actors.let { adapter.submitList(it) }
-*/
         binding.backTextView.setOnClickListener { activity?.onBackPressed() }
     }
 

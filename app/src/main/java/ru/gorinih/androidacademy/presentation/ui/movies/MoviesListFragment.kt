@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.coroutines.FlowPreview
@@ -16,13 +18,18 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.coroutines.Job
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
+import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.R
+import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
 import ru.gorinih.androidacademy.presentation.ui.movies.adapters.MoviesListRecyclerViewAdapter
 import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesLoadStateAdapter
 import ru.gorinih.androidacademy.presentation.ui.movies.viewmodel.MoviesViewModel
 import ru.gorinih.androidacademy.presentation.ui.movies.viewmodel.MoviesViewModelFactory
 
+@FlowPreview
+@InternalCoroutinesApi
+@ExperimentalSerializationApi
 class MoviesListFragment : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
@@ -32,7 +39,6 @@ class MoviesListFragment : Fragment() {
 
     private var listenerClickFragment: ClickFragment? = null
 
-    @InternalCoroutinesApi
     private lateinit var viewModel: MoviesViewModel
 
     private var jobMovies: Job? = null
@@ -47,39 +53,11 @@ class MoviesListFragment : Fragment() {
             binding.root
         }
 
-    @FlowPreview
-    @InternalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        viewModel =
-            ViewModelProvider(this, MoviesViewModelFactory()).get(MoviesViewModel::class.java)
-        val spanCount = getSpanCount()
-        val layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false)
-        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
-            override fun getSpanSize(position: Int): Int {
-                return if (position == 0) {
-                    spanCount
-                } else {
-                    1
-                }
-            }
-        }
-        binding.listMovies.layoutManager = layoutManager
-
-        adapterList = MoviesListRecyclerViewAdapter {
-            listenerClickFragment?.onMovieClick(it)
-        }
-        binding.listMovies.adapter = adapterList.withLoadStateHeaderAndFooter(
-            header = MoviesLoadStateAdapter { adapterList.retry() },
-            footer = MoviesLoadStateAdapter { adapterList.retry() }
-        )
-        jobMovies?.cancel()
-        jobMovies = lifecycleScope.launch {
-            viewModel.getMovies().collectLatest {
-                adapterList.submitData(it)
-            }
-        }
+        initViewModel()
+        initAdapter()
+        observeData()
     }
 
     override fun onAttach(context: Context) {
@@ -96,6 +74,53 @@ class MoviesListFragment : Fragment() {
     override fun onDestroyView() {
         _binding = null
         super.onDestroyView()
+    }
+
+    private fun observeData() {
+        binding.retryButton.setOnClickListener { adapterList.retry() }
+        jobMovies?.cancel()
+        jobMovies = lifecycleScope.launch {
+            viewModel.getMovies().collectLatest {
+                adapterList.submitData(it)
+            }
+        }
+    }
+
+    private fun initAdapter() {
+        val spanCount = getSpanCount()
+        val layoutManager = GridLayoutManager(context, spanCount, RecyclerView.VERTICAL, false)
+        layoutManager.spanSizeLookup = object : GridLayoutManager.SpanSizeLookup() {
+            override fun getSpanSize(position: Int): Int {
+                return if (position == 0) {
+                    spanCount
+                } else {
+                    1
+                }
+            }
+        }
+        binding.listMovies.layoutManager = layoutManager
+
+        adapterList = MoviesListRecyclerViewAdapter {
+            listenerClickFragment?.onMovieClick(it)
+        }
+        adapterList.addLoadStateListener {
+            binding.mainProgressBar.isVisible = it.source?.refresh is LoadState.Loading
+            binding.retryButton.isVisible =
+                it.source?.refresh is LoadState.Error// it.source.refresh is LoadState.Error
+        }
+        binding.listMovies.adapter = adapterList.withLoadStateHeaderAndFooter(
+            header = MoviesLoadStateAdapter { adapterList.retry() },
+            footer = MoviesLoadStateAdapter { adapterList.retry() }
+        )
+
+    }
+
+    private fun initViewModel() {
+        viewModel =
+            ViewModelProvider(
+                this,
+                MoviesViewModelFactory(requireContext())
+            ).get(MoviesViewModel::class.java)
     }
 
     private fun getSpanCount(): Int {

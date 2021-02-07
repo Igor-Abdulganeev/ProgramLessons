@@ -41,7 +41,9 @@ sealed class Movies {
     */
     @Entity(tableName = "movies")
     data class Movie(
-        @PrimaryKey
+        @PrimaryKey(autoGenerate = true)
+        @ColumnInfo(name = "id_db")
+        var idDb: Int = 0,
         @ColumnInfo(name = "id")
         var id: Int = 0,
         @ColumnInfo(name = "name_movie")
@@ -128,11 +130,3 @@ data class RelationGenresOfMovie(
     val genre_id: Int
 )
 
-@Entity(tableName = "tmp_id_movies")
-data class TmpIdMovies(
-    @PrimaryKey(autoGenerate = true)
-    @ColumnInfo(name = "id")
-    val id: Int,
-    @ColumnInfo(name = "id_movie")
-    val idMovie: Int
-)

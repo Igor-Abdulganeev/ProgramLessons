@@ -1,5 +1,4 @@
 package ru.gorinih.androidacademy.data.db
-/*
 
 import android.content.Context
 import androidx.room.Database
@@ -10,13 +9,19 @@ import kotlinx.coroutines.internal.synchronized
 import ru.gorinih.androidacademy.data.models.*
 
 @Database(
-    entities = [Movies.Movie::class, Actor::class, Genre::class, RelationActorsOfMovie::class, RelationGenresOfMovie::class, TmpIdMovies::class],
+    entities = [Movies.Movie::class,
+        Actor::class,
+        Genre::class,
+        RelationActorsOfMovie::class,
+        RelationGenresOfMovie::class,
+        RemoteKeys::class],
     version = 1,
     exportSchema = false
 )
 abstract class MoviesDatabase : RoomDatabase() {
 
     abstract val moviesDao: MoviesDao
+    abstract val remoteKeysDao: RemoteKeysDao
 
     companion object {
         private var hInstance: MoviesDatabase? = null
@@ -33,4 +38,4 @@ abstract class MoviesDatabase : RoomDatabase() {
         ).fallbackToDestructiveMigration()
             .build()
     }
-}*/
+}

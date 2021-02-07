@@ -1,6 +1,7 @@
 package ru.gorinih.androidacademy.data.db
 
-/*
+
+import androidx.paging.PagingSource
 import androidx.room.*
 import ru.gorinih.androidacademy.data.models.*
 
@@ -11,32 +12,38 @@ interface MoviesDao {
     suspend fun insertUpdateMovies(items: List<Movies.Movie>)
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertActors(items: List<Actor>)
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertGenres(items: List<Genre>)
 
     @Insert
-    suspend fun insertActorsOfMovie(items: List<RelationActorsOfMovie>)
+    suspend fun insertGenresOfMovie(items: List<RelationGenresOfMovie>)
+
+    /*
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertActors(items: List<Actor>)
 
     @Insert
-    suspend fun insertGenresOfMovie(items: List<RelationGenresOfMovie>)
+    suspend fun insertActorsOfMovie(items: List<RelationActorsOfMovie>)
 
     @Query(
         "SELECT * FROM movies WHERE id NOT IN (SELECT id_movie FROM tmp_id_movies) LIMIT 20"
     )
     suspend fun loadMoviesFromDB(): List<Movies.Movie>
-
+    */
     @Query(
-        "SELECT * FROM movies LIMIT 20"
+        "SELECT * FROM movies ORDER BY id_db"
     )
-    suspend fun loadMoviesFromDBFirst(): List<Movies.Movie>
+    fun loadMoviesFromDB(): PagingSource<Int, Movies.Movie>
 
     @Query(
         "SELECT * FROM genres WHERE id IN (SELECT id_genre FROM relation_genres_of_movie WHERE id_movie = :id_movie)"
     )
     suspend fun loadGenresById(id_movie: Int): List<Genre>?
 
+    @Query(
+        "DELETE FROM movies"
+    )
+    suspend fun clearMovies()
+/*
     @Query(
         "SELECT * FROM actors WHERE id IN (SELECT id_actor FROM relation_actors_of_movie WHERE id_movie = :id_movie)"
     )
@@ -54,5 +61,6 @@ interface MoviesDao {
 
     @Query("DELETE FROM tmp_id_movies")
     suspend fun deleteIdMovie()
+    */
 }
-*/
+

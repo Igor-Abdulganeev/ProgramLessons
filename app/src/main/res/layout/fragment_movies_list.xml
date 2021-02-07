@@ -21,26 +21,43 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:listitem="@layout/movie_item_view_holder" />
 
-    <!--
         <ProgressBar
             android:id="@+id/main_progress_bar"
             style="?android:attr/progressBarStyle"
+            android:elevation="@dimen/margin_6"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content" />
 
-        <Button
-            android:id="@+id/retry_button"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintLeft_toLeftOf="parent"
-            app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Обновить" />
+    <Button
+        android:id="@+id/retry_button"
+        android:elevation="@dimen/margin_4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/text_retry_button" />
+
+    <!--
+        <com.google.android.material.imageview.ShapeableImageView
+            android:id="@+id/splash_image"
+            android:elevation="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/margin_154"
+            android:layout_marginBottom="@dimen/margin_154"
+            android:layout_marginStart="@dimen/margin_32"
+            android:layout_marginEnd="@dimen/margin_32"
+            android:scaleType="centerCrop"
+            app:shapeAppearanceOverlay="@style/CornerImageView_6"
+            android:src="@drawable/splash_movie"
+            />
     -->
 
 </androidx.constraintlayout.widget.ConstraintLayout>
