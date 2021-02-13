@@ -16,80 +16,106 @@ import java.io.InvalidObjectException
 class MoviesRemoteMediator(
     private val moviesApi: MoviesApi,
     private val moviesDatabase: MoviesDatabase
-) : RemoteMediator<Int, Movies.Movie>() {
+) : RemoteMediator<Int, Movies>() {
     override suspend fun load(
         loadType: LoadType,
-        state: PagingState<Int, Movies.Movie>
+        state: PagingState<Int, Movies>
     ): MediatorResult {
         val currentKey: Int = when (loadType) {
             LoadType.REFRESH -> {
-                val keys = getRemoteKeyClosestToCurrentPosition(state)
+                val keys = loadRemoteKeyClosestToCurrentPosition(state)
                 keys?.nextKey?.minus(1) ?: STARTING_PAGE
             }
             LoadType.APPEND -> {
-                val keys = getRemoteKeyForLastItem(state)
+                val keys = loadRemoteKeyForLastItem(state)
                 if (keys?.nextKey == null) {
                     throw InvalidObjectException("Remote key should not be null for $loadType")
                 }
                 keys.nextKey
             }
             LoadType.PREPEND -> {
-                val keys = getRemoteKeyForFirstItem(state)
+                val keys = loadRemoteKeyForFirstItem(state)
                     ?: throw InvalidObjectException("Remote key and the prevKey should not be null")
                 val prevKey = keys.prevKey
                     ?: return MediatorResult.Success(true)
                 prevKey
             }
         }
-        try {
-            var conf: ConfigurationTmdb?
-            var response: MoviesTmdb?
-            var genreTmdb: GenreTmdb?
-            coroutineScope {
-                conf = withContext(Dispatchers.IO) { moviesApi.getConfiguration() }
-                response = withContext(Dispatchers.IO) { moviesApi.getMovies(currentKey) }
-                genreTmdb = withContext(Dispatchers.IO) { moviesApi.getGenre() }
-            }
-
-            val genres: List<Genre> = genreTmdb?.genres ?: emptyList()
-            val result = parseMovies(
-                (response ?: emptyList<MoviesTmdb>()) as MoviesTmdb,
-                genres,
-                conf?.images?.secureBaseUrl ?: "http://image.tmdb.org/t/p/"
-            )
+        return try {
+            val result = getData(currentKey)
             val endOfPaginationReached = result.isEmpty()
-
-            moviesDatabase.withTransaction {
-                if (loadType == LoadType.REFRESH) {
-                    coroutineScope {
-                        withContext(Dispatchers.IO) { moviesDatabase.remoteKeysDao.clearRemoteKeys() }
-//                        withContext(Dispatchers.IO) { moviesDatabase.moviesDao.clearMovies() }
-                    }
+            if (!endOfPaginationReached) {
+                moviesDatabase.withTransaction {
+                    //                clearDatabase(loadType)
+                    insertData(currentKey, endOfPaginationReached, result)
                 }
-                val prevKey = if (currentKey == STARTING_PAGE) null else currentKey - 1
-                val nextKey = if (endOfPaginationReached) null else currentKey + 1
-                val keys =
-                    result.map { RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey) }
-                withContext(Dispatchers.IO) {
-                    moviesDatabase.remoteKeysDao.insertRemoteKeys(remoteKey = keys)
-                }
-
-                result.forEach {
-                    insertGenres(it.id, it.listOfGenre)
-                }
-
-                insertData(result, genres)
             }
-            return MediatorResult.Success(endOfPaginationReached)
+            MediatorResult.Success(endOfPaginationReached)
         } catch (ex: IOException) {
-            return MediatorResult.Error(ex)
+            MediatorResult.Error(ex)
         } catch (ex: HttpException) {
-            return MediatorResult.Error(ex)
+            MediatorResult.Error(ex)
         }
     }
 
-    fun getMovies(): PagingSource<Int, Movies.Movie> =
-        moviesDatabase.moviesDao.loadMoviesFromDB()
+    suspend fun insertData(
+        currentKey: Int,
+        endOfPaginationReached: Boolean,
+        result: List<Movies.Movie>
+    ) {
+        val prevKey = if (currentKey == STARTING_PAGE) null else currentKey - 1
+        val nextKey = if (endOfPaginationReached) null else currentKey + 1
+        val keys = result.map { RemoteKeys(id = it.id, prevKey = prevKey, nextKey = nextKey) }
+        coroutineScope {
+            withContext(Dispatchers.IO) {
+                moviesDatabase.remoteKeysDao.insertRemoteKeys(remoteKey = keys)
+            }
+            withContext(Dispatchers.IO) {
+                moviesDatabase.moviesDao.insertUpdateMovies(items = result)
+            }
+            withContext(Dispatchers.IO) {
+                result.forEach {
+                    insertGenres(it.id, it.listOfGenre)
+                }
+            }
+        }
+
+    }
+
+    suspend fun getData(currentKey: Int): List<Movies.Movie> {
+        var conf: ConfigurationTmdb?
+        var response: MoviesTmdb?
+        var genreTmdb: GenreTmdb?
+        coroutineScope {
+            conf = withContext(Dispatchers.IO) { moviesApi.getConfiguration() }
+            response = withContext(Dispatchers.IO) { moviesApi.getMovies(currentKey) }
+            genreTmdb = withContext(Dispatchers.IO) { moviesApi.getGenre() }
+        }
+        val genres: List<Genre> = genreTmdb?.genres ?: emptyList()
+        if (genres.isNotEmpty()) {
+            withContext(Dispatchers.IO) { insertAllGenres(genres) }
+        }
+        return parseMovies(
+            (response ?: emptyList<MoviesTmdb>()) as MoviesTmdb,
+            genres,
+            conf?.images?.secureBaseUrl ?: "http://image.tmdb.org/t/p/"
+        )
+    }
+
+    private suspend fun clearDatabase(loadType: LoadType) {
+        if (loadType == LoadType.REFRESH) {
+            coroutineScope {
+                withContext(Dispatchers.IO) { moviesDatabase.remoteKeysDao.clearRemoteKeys() }
+                withContext(Dispatchers.IO) { moviesDatabase.moviesDao.clearMovies() }
+            }
+        }
+    }
+
+    @Suppress("UNCHECKED_CAST")
+    fun loadMovies(): PagingSource<Int, Movies> {
+        val movies = moviesDatabase.moviesDao.loadMoviesFromDB()
+        return movies as PagingSource<Int, Movies>
+    }
 
     suspend fun loadGenres(idMovie: Int): List<Genre> = withContext(Dispatchers.IO) {
         moviesDatabase.moviesDao.loadGenresById(idMovie) ?: emptyList()
@@ -106,22 +132,11 @@ class MoviesRemoteMediator(
         withContext(Dispatchers.IO) { moviesDatabase.moviesDao.insertGenresOfMovie(items) }
     }
 
-    private suspend fun insertData(
-        result: List<Movies>,
-        genres: List<Genre>
-    ) {
-        val movies = result.filterIsInstance(Movies.Movie::class.java)
-        coroutineScope {
-            withContext(Dispatchers.IO) {
-                moviesDatabase.moviesDao.insertUpdateMovies(items = movies)
-            }
-            withContext(Dispatchers.IO) {
-                moviesDatabase.moviesDao.insertGenres(items = genres)
-            }
-        }
+    private suspend fun insertAllGenres(listOfGenre: List<Genre>) = withContext(Dispatchers.IO) {
+        moviesDatabase.moviesDao.insertGenres(items = listOfGenre)
     }
 
-    private suspend fun getRemoteKeyForLastItem(loadState: PagingState<Int, Movies.Movie>): RemoteKeys? {
+    private suspend fun loadRemoteKeyForLastItem(loadState: PagingState<Int, Movies>): RemoteKeys? {
         return loadState.pages.lastOrNull {
             it.data.isNotEmpty()
         }?.data?.lastOrNull()?.let {
@@ -129,7 +144,7 @@ class MoviesRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyForFirstItem(loadState: PagingState<Int, Movies.Movie>): RemoteKeys? {
+    private suspend fun loadRemoteKeyForFirstItem(loadState: PagingState<Int, Movies>): RemoteKeys? {
         return loadState.pages.firstOrNull {
             it.data.isNotEmpty()
         }?.data?.firstOrNull()?.let {
@@ -137,7 +152,7 @@ class MoviesRemoteMediator(
         }
     }
 
-    private suspend fun getRemoteKeyClosestToCurrentPosition(loadState: PagingState<Int, Movies.Movie>): RemoteKeys? {
+    private suspend fun loadRemoteKeyClosestToCurrentPosition(loadState: PagingState<Int, Movies>): RemoteKeys? {
         return loadState.anchorPosition?.let {
             (loadState.closestItemToPosition(it) as Movies.Movie).id.let { lastIt ->
                 moviesDatabase.remoteKeysDao.remoteKeysById(lastIt)
@@ -151,7 +166,7 @@ class MoviesRemoteMediator(
         baseImageUrl: String
     ): List<Movies.Movie> {
         val genres = genreTmdb.associateBy { it.id }
-        return data.results.map { it ->
+        return data.results.map {
             Movies.Movie(
                 id = it.id,
                 nameMovie = it.originalTitle,

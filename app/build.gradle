@@ -69,6 +69,8 @@ dependencies {
 //Paging 3
     implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 
+//Woker
+    implementation 'androidx.work:work-runtime-ktx:2.5.0'
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

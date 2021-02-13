@@ -15,6 +15,9 @@ interface RemoteKeysDao {
     @Query("SELECT * FROM remote_keys WHERE id = :id")
     suspend fun remoteKeysById(id: Int): RemoteKeys?
 
+    @Query("SELECT MAX(nextKey) FROM remote_keys LIMIT 1")
+    fun getMaxNextKey(): Int?
+
     @Query("DELETE FROM remote_keys")
     suspend fun clearRemoteKeys()
 }

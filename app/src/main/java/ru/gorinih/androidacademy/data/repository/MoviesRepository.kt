@@ -1,11 +1,9 @@
 package ru.gorinih.androidacademy.data.repository
 
-import androidx.paging.ExperimentalPagingApi
-import androidx.paging.Pager
-import androidx.paging.PagingConfig
-import androidx.paging.PagingData
+import androidx.paging.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.withContext
 import ru.gorinih.androidacademy.data.models.Genre
 import ru.gorinih.androidacademy.data.models.Movies
@@ -15,18 +13,35 @@ class MoviesRepository(private val moviesMediator: MoviesRemoteMediator) {
 
     @ExperimentalPagingApi
     @OptIn(ExperimentalPagingApi::class)
-    fun loadMovies(): Flow<PagingData<Movies.Movie>> {
+    fun loadMovies(): Flow<PagingData<Movies>> {
         return Pager(
             config = PagingConfig(
                 pageSize = 20,
                 enablePlaceholders = false,
             ),
             remoteMediator = moviesMediator,
-            pagingSourceFactory = { moviesMediator.getMovies() }
+            pagingSourceFactory = { moviesMediator.loadMovies() }
         ).flow
+            .map { pd ->
+                pd.map {
+                    it as Movies.Movie
+                    val genres = getGenres(it.id)
+                    it.listOfGenre = genres
+                    it
+                }
+            }
+            .map {
+                it.insertSeparators<Movies.Movie, Movies> { before, _ ->
+                    if (before == null) {
+                        Movies.Header
+                    } else {
+                        null
+                    }
+                }
+            }
     }
 
-    suspend fun getGenres(id: Int): List<Genre> = withContext(Dispatchers.IO) {
+    private suspend fun getGenres(id: Int): List<Genre> = withContext(Dispatchers.IO) {
         moviesMediator.loadGenres(id)
     }
 

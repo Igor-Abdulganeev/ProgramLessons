@@ -81,6 +81,17 @@ class MoviesListFragment : Fragment() {
         jobMovies = lifecycleScope.launch {
             viewModel.getMovies().collectLatest {
                 adapterList.submitData(it)
+/*
+                    .map {
+                        if (it is Movies.Movie) {
+                            if (it.idDb == 1 ) {
+                                Movies.Header as Movies
+                            }
+                            else it
+                        }
+                        else it
+                    }
+*/
             }
         }
     }
