@@ -17,7 +17,7 @@ class MoviesRepoWorker {
     val moviesTaskRequest =
         PeriodicWorkRequest.Builder(MoviesWorker::class.java, 15, TimeUnit.MINUTES)
             .setConstraints(constraint)
-            .setInitialDelay(4, TimeUnit.HOURS)
+            .setInitialDelay(10, TimeUnit.SECONDS)
             .addTag(TAG)
             .build()
 

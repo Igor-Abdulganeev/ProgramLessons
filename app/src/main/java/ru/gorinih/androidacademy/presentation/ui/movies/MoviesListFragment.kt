@@ -111,7 +111,7 @@ class MoviesListFragment : Fragment() {
         binding.listMovies.layoutManager = layoutManager
 
         adapterList = MoviesListRecyclerViewAdapter {
-            listenerClickFragment?.onMovieClick(it)
+            listenerClickFragment?.onMovieClick(it, false)
         }
         adapterList.addLoadStateListener {
             binding.mainProgressBar.isVisible = it.source?.refresh is LoadState.Loading
@@ -147,5 +147,5 @@ class MoviesListFragment : Fragment() {
 }
 
 interface ClickFragment {
-    fun onMovieClick(id: Int)
+    fun onMovieClick(id: Int, startNotify: Boolean)
 }
