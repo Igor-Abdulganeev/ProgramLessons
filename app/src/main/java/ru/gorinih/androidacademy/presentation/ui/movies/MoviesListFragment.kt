@@ -10,14 +10,14 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import androidx.paging.CombinedLoadStates
 import androidx.paging.LoadState
+import androidx.paging.LoadType
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.coroutines.FlowPreview
-import kotlinx.coroutines.InternalCoroutinesApi
-import kotlinx.coroutines.Job
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.cancellable
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.launch
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
@@ -52,6 +52,7 @@ class MoviesListFragment : Fragment() {
             binding.root
         }
 
+    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
@@ -66,6 +67,7 @@ class MoviesListFragment : Fragment() {
     }
 
     override fun onDetach() {
+        jobMovies?.cancel()
         listenerClickFragment = null
         super.onDetach()
     }
@@ -75,6 +77,7 @@ class MoviesListFragment : Fragment() {
         super.onDestroyView()
     }
 
+    @ExperimentalCoroutinesApi
     private fun observeData() {
         binding.retryButton.setOnClickListener { adapterList.retry() }
         jobMovies?.cancel()
@@ -113,15 +116,20 @@ class MoviesListFragment : Fragment() {
         adapterList = MoviesListRecyclerViewAdapter {
             listenerClickFragment?.onMovieClick(it, false)
         }
-        adapterList.addLoadStateListener {
-            binding.mainProgressBar.isVisible = it.source?.refresh is LoadState.Loading
-            binding.retryButton.isVisible =
-                it.source?.refresh is LoadState.Error// it.source.refresh is LoadState.Error
+        viewLifecycleOwner.lifecycleScope.launch {
+            adapterList.loadStateFlow.collectLatest {
+                binding.mainProgressBar.isVisible =
+                    it.source.refresh is LoadState.Loading
+                binding.retryButton.isVisible =
+                    it.source.refresh is LoadState.Error
+            }
         }
+
         binding.listMovies.adapter = adapterList.withLoadStateHeaderAndFooter(
             header = MoviesLoadStateAdapter { adapterList.retry() },
             footer = MoviesLoadStateAdapter { adapterList.retry() }
         )
+
 
     }
 

@@ -89,7 +89,8 @@ class MainActivity : AppCompatActivity(), ClickFragment {
                 MovieDetailsFragment.newInstance(id),
                 MOVIE_FRAGMENT_TAG
             )
-            if (!startNotify) addToBackStack(null)
+            // if (!startNotify)
+            addToBackStack(null)
             commit()
         }
     }

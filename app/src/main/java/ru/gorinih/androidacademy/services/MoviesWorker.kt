@@ -5,6 +5,7 @@ import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
+import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
 import android.os.Build
 import android.util.Log
@@ -110,6 +111,12 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
                         showNotify
                             .setStyle(
                                 NotificationCompat.BigTextStyle().bigText(movieNotify.description)
+                            )
+                            .setLargeIcon(
+                                BitmapFactory.decodeResource(
+                                    context.resources,
+                                    R.drawable.location
+                                )
                             )
                             .build()
                     )
