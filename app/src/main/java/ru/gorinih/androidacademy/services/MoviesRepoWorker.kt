@@ -2,13 +2,12 @@ package ru.gorinih.androidacademy.services
 
 import androidx.work.Constraints
 import androidx.work.NetworkType
-import androidx.work.OneTimeWorkRequest
 import androidx.work.PeriodicWorkRequest
 import java.util.concurrent.TimeUnit
 
 class MoviesRepoWorker {
 
-    private val TAG = "MoviesRepoWorker"
+    private val TAG = "ru.gorinih.androidacademy"
     private val networkType = NetworkType.CONNECTED
     private val constraint = Constraints.Builder()
         .setRequiredNetworkType(networkType)

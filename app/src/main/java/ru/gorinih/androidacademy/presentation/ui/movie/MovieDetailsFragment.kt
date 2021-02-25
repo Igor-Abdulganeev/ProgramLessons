@@ -102,6 +102,7 @@ class MovieDetailsFragment : Fragment() {
         binding.backTextView.setOnClickListener { activity?.onBackPressed() }
     }
 
+
     companion object {
         private const val ID_MOVIE = "idMovie"
         fun newInstance(id: Int) = MovieDetailsFragment().apply {

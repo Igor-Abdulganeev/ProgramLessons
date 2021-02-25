@@ -1,15 +1,12 @@
 package ru.gorinih.androidacademy.services
 
-import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.drawable.Drawable
-import android.os.Build
 import android.util.Log
-import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.Worker
@@ -33,101 +30,97 @@ import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesRemoteMedia
 class MoviesWorker(private val context: Context, workerParams: WorkerParameters) :
     Worker(context, workerParams) {
 
-    @SuppressLint("UseCompatLoadingForDrawables")
-    @RequiresApi(Build.VERSION_CODES.O)
     @ExperimentalSerializationApi
     @InternalCoroutinesApi
     override fun doWork(): Result {
         return try {
-            val scope = CoroutineScope(Dispatchers.IO)
-            val movieApi = MoviesApi.newInstance()
-            val movieDatabase = MoviesDatabase.newInstance(context)
-            val movieMediator = MoviesRemoteMediator(movieApi, movieDatabase)
-            val key = movieDatabase.remoteKeysDao.getMaxNextKey() ?: 1
-            val notificationManager = NotificationManagerCompat.from(context.applicationContext)
-
-            Log.d(TAG, "Получен ключ = $key")
-
-            scope.launch {
-
-                val movieNotify = getMovie(key, movieMediator)
-                Log.d(TAG, "Получен фильм ${movieNotify.id} - ${movieNotify.nameMovie}")
-
-                val showNotify = buildNotification(movieNotify)
-
-                val urlImage =
-                    if (movieNotify.detailPoster != "null") movieNotify.detailPoster
-                    else if (movieNotify.poster != "null") movieNotify.poster
-                    else "null"
-                if (urlImage.substring(urlImage.length - 4, urlImage.length) != "null")
-                    Glide.with(context)
-                        .asBitmap()
-                        .load(urlImage)
-                        .placeholder(R.drawable.ic_no_photo)
-                        .listener(object : RequestListener<Bitmap> {
-                            override fun onLoadFailed(
-                                e: GlideException?,
-                                model: Any?,
-                                target: Target<Bitmap>?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                Log.d(TAG, "notification error glide")
-                                return false
-                            }
-
-                            override fun onResourceReady(
-                                resource: Bitmap?,
-                                model: Any?,
-                                target: Target<Bitmap>?,
-                                dataSource: DataSource?,
-                                isFirstResource: Boolean
-                            ): Boolean {
-                                notificationManager.notify(
-                                    "MovieView",
-                                    1,
-                                    showNotify.setStyle(
-                                        NotificationCompat.BigPictureStyle().bigPicture(resource)
-                                    ).build()
-                                )
-                                scope.cancel()
-                                return true
-                            }
-                        })
-                        .into(object : CustomTarget<Bitmap>() {
-                            override fun onResourceReady(
-                                resource: Bitmap,
-                                transition: Transition<in Bitmap>?
-                            ) {
-                                Log.d(TAG, "notification completed")
-                            }
-
-                            override fun onLoadCleared(placeholder: Drawable?) {
-                            }
-                        })
-                else {
-                    notificationManager.notify(
-                        "MovieView",
-                        1,
-                        showNotify
-                            .setStyle(
-                                NotificationCompat.BigTextStyle().bigText(movieNotify.description)
-                            )
-                            .setLargeIcon(
-                                BitmapFactory.decodeResource(
-                                    context.resources,
-                                    R.drawable.location
-                                )
-                            )
-                            .build()
-                    )
-                    scope.cancel()
-                }
-            }
+            val movieNotification = loadLastNotification()
+            movieNotification?.let { showNotification(it) }
             Result.success()
         } catch (ex: Throwable) {
             Log.d(TAG, "Error in $TAG = $ex")
             Result.failure()
         }
+    }
+
+    private fun showNotification(movieNotification: Movies.Movie) {
+        val notificationBuilder = buildNotification(movieNotification)
+        val notificationManager = NotificationManagerCompat.from(context.applicationContext)
+        val urlImage =
+            if (movieNotification.detailPoster != "null") movieNotification.detailPoster
+            else if (movieNotification.poster != "null") movieNotification.poster
+            else "null"
+        if (urlImage.substring(urlImage.length - 4, urlImage.length) != "null")
+            Glide.with(context)
+                .asBitmap()
+                .load(urlImage)
+                .placeholder(R.drawable.ic_no_photo)
+                .listener(object : RequestListener<Bitmap> {
+                    override fun onLoadFailed(
+                        e: GlideException?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        Log.d(TAG, "notification error glide")
+                        return false
+                    }
+
+                    override fun onResourceReady(
+                        resource: Bitmap?,
+                        model: Any?,
+                        target: Target<Bitmap>?,
+                        dataSource: DataSource?,
+                        isFirstResource: Boolean
+                    ): Boolean {
+                        notificationManager.notify(
+                            context.getString(R.string.notification_channel_id),
+                            1,
+                            notificationBuilder.setStyle(
+                                NotificationCompat.BigPictureStyle().bigPicture(resource)
+                            ).build()
+                        )
+                        return true
+                    }
+                })
+                .into(object : CustomTarget<Bitmap>() {
+                    override fun onResourceReady(
+                        resource: Bitmap,
+                        transition: Transition<in Bitmap>?
+                    ) {
+                        Log.d(TAG, "notification completed")
+                    }
+
+                    override fun onLoadCleared(placeholder: Drawable?) {
+                    }
+                })
+        else {
+            notificationManager.notify(
+                context.getString(R.string.notification_channel_id),
+                1,
+                notificationBuilder
+                    .setStyle(
+                        NotificationCompat.BigTextStyle().bigText(movieNotification.description)
+                    )
+                    .setLargeIcon(
+                        BitmapFactory.decodeResource(
+                            context.resources,
+                            R.drawable.location
+                        )
+                    )
+                    .build()
+            )
+        }
+    }
+
+    @ExperimentalSerializationApi
+    @InternalCoroutinesApi
+    private fun loadLastNotification(): Movies.Movie? {
+        var movie: Movies.Movie?
+        runBlocking(Dispatchers.IO) {
+            movie = getMovie()
+        }
+        return movie
     }
 
     private fun buildNotification(movie: Movies.Movie): NotificationCompat.Builder {
@@ -138,8 +131,7 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
             .joinToString()
         val intent = Intent(context, MainActivity::class.java)
             .setAction(Intent.ACTION_VIEW)
-            .putExtra("idMovie", movie.id)
-            .putExtra("startNotify", true)
+            .putExtra(context.getString(R.string.name_intent), movie.id)
         val pendingIntent =
             PendingIntent.getActivity(
                 context,
@@ -148,7 +140,8 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
                 PendingIntent.FLAG_UPDATE_CURRENT
             )
         return NotificationCompat.Builder(
-            context.applicationContext, "MovieView"
+            context.applicationContext,
+            context.getString(R.string.notification_channel_id)
         )
             .setContentTitle(movie.nameMovie)
             .setContentText(genres)
@@ -159,20 +152,26 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
             .setAutoCancel(true)
     }
 
-    private suspend fun getMovie(key: Int, movieMediator: MoviesRemoteMediator): Movies.Movie {
-        val resultMovies = withContext(Dispatchers.IO) {
-            movieMediator.getData(currentKey = key)
-        }
-        withContext(Dispatchers.IO) {
+    @InternalCoroutinesApi
+    @ExperimentalSerializationApi
+    private suspend fun getMovie(): Movies.Movie? {
+        val movieApi = MoviesApi.newInstance()
+        val movieDatabase = MoviesDatabase.newInstance(context)
+        val movieMediator = MoviesRemoteMediator(movieApi, movieDatabase)
+        val key = movieDatabase.remoteKeysDao.getMaxNextKey() ?: 0
+        if (key != 0) {
+            val resultMovies =
+                movieMediator.getData(currentKey = key)
             movieMediator.insertData(
                 currentKey = key,
                 endOfPaginationReached = resultMovies.isEmpty(),
                 result = resultMovies
             )
+            return resultMovies.maxOfWith(
+                compareBy { it?.rating }
+            ) { it }
         }
-        return resultMovies.maxOfWith(
-            compareBy { it.rating }
-        ) { it }
+        return null
     }
 
     companion object {

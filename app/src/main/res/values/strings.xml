@@ -30,4 +30,9 @@
     <string name="retry_load_movies_button">повторить</string>
     <string name="text_retry_button">Обновить</string>
     <!--End movie card -->
+
+    <string name="notification_channel_id">MovieView</string>
+    <string name="name_notification_channel">New movie show</string>
+    <string name="name_intent">idMovie</string>
+
 </resources>

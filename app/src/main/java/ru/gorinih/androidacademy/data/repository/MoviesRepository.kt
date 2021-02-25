@@ -22,8 +22,8 @@ class MoviesRepository(private val moviesMediator: MoviesRemoteMediator) {
             remoteMediator = moviesMediator,
             pagingSourceFactory = { moviesMediator.loadMovies() }
         ).flow
-            .map { pd ->
-                pd.map {
+            .map { pagingData ->
+                pagingData.map {
                     it as Movies.Movie
                     val genres = getGenres(it.id)
                     it.listOfGenre = genres
