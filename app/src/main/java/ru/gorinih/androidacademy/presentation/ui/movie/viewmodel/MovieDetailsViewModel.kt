@@ -20,7 +20,7 @@ class MovieDetailsViewModel(private val movieRepository: MovieRepository) : View
             movie?.let {
                 _movie.value = movie
                 if (movie.listOfActors.isEmpty()) {
-                    val newMovie: Movies.Movie? = movieRepository.loadMovie(idMove)
+                    val newMovie: Movies.Movie? = movieRepository.loadMovieNetwork(idMove)
                     newMovie?.let { _movie.value = newMovie }
                 }
 

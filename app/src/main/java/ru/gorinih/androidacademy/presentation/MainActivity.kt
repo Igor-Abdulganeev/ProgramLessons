@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.ViewCompat
 import androidx.fragment.app.FragmentManager
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
@@ -49,7 +50,9 @@ class MainActivity : AppCompatActivity(), ClickFragment {
         if (intent != null) {
             val idMovie = intent.getIntExtra(getString(R.string.name_intent), 0)
             if (idMovie != 0) {
-                onMovieClick(idMovie, requireViewById(R.id.fragment_ui))
+                val view: View = requireViewById(R.id.fragment_ui)
+                ViewCompat.setTransitionName(view, idMovie.toString())
+                onMovieClick(idMovie, view)
             }
         }
     }
@@ -58,7 +61,9 @@ class MainActivity : AppCompatActivity(), ClickFragment {
     private fun startIntent(intent: Intent) {
         val idMovie = intent.getIntExtra(getString(R.string.name_intent), 0)
         if (idMovie != 0) {
-            onMovieClick(idMovie, requireViewById(R.id.fragment_ui))
+            val view: View = requireViewById(R.id.fragment_ui)
+            ViewCompat.setTransitionName(view, idMovie.toString())
+            onMovieClick(idMovie, view)
         }
     }
 

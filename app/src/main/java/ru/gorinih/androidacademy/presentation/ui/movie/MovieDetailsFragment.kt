@@ -88,20 +88,22 @@ class MovieDetailsFragment : Fragment() {
     }
 
     private fun showMovie(movie: Movies.Movie) {
-        binding.progressBar.isVisible = true
-        binding.descriptionTextView.text = movie.description
-        binding.reviewsTextView.text =
-            resources.getString(R.string.reviews_text, movie.reviews.toString())
-        binding.reviewsRatingBar.rating = movie.rating / 2
-        binding.tagTextView.text =
-            movie.listOfGenre.map { it.nameGenre }.sorted().joinToString(separator = ", ")
-        binding.nameMovieTextView.text = movie.nameMovie
-        binding.pgTextView.text = movie.rated
         val actors = movie.listOfActors
         val adapter = ActorsListRecyclerViewAdapter()
-        binding.listActors.adapter = adapter
+        binding.apply {
+            progressBar.isVisible = true
+            descriptionTextView.text = movie.description
+            reviewsTextView.text =
+                resources.getString(R.string.reviews_text, movie.reviews.toString())
+            reviewsRatingBar.rating = movie.rating / 2
+            tagTextView.text =
+                movie.listOfGenre.map { it.nameGenre }.sorted().joinToString(separator = ", ")
+            nameMovieTextView.text = movie.nameMovie
+            pgTextView.text = movie.rated
+            backTextView.setOnClickListener { activity?.onBackPressed() }
+            listActors.adapter = adapter
+        }
         actors.let { adapter.submitList(it) }
-        binding.backTextView.setOnClickListener { activity?.onBackPressed() }
         Glide.with(requireContext())
             .load(movie.detailPoster)
             .placeholder(R.drawable.ic_no_image)

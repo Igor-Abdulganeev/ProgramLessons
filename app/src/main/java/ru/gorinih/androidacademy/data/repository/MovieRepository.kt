@@ -14,7 +14,6 @@ class MovieRepository(
     private val moviesApi: MoviesApi,
     private val moviesDatabase: MoviesDatabase
 ) {
-
     @ExperimentalStdlibApi
     suspend fun loadMovie(id: Int): Movies.Movie? {
         val result: Movies.Movie? = moviesDatabase.withTransaction {
@@ -25,16 +24,21 @@ class MovieRepository(
             }
             response
         }
+        result?.also { return it }
+        return loadMovieNetwork(id)
+    }
 
-        val resultNetwork = withContext(Dispatchers.IO) {
+    suspend fun loadMovieNetwork(id: Int): Movies.Movie? {
+        return withContext(Dispatchers.IO) {
             var movieDetailsTmdb: MovieDetailsTmdb? = null
             var configurationTmdb: ConfigurationTmdb? = null
             var actorsTmdb: MovieActorsTmdb? = null
 
             coroutineScope {
-                runCatching {
+                runCatching<MovieRepository, Unit> {
                     movieDetailsTmdb = withContext(Dispatchers.IO) { getMovieDetails(id = id) }
-                    configurationTmdb = withContext(Dispatchers.IO) { getConfiguration() }
+                    configurationTmdb =
+                        withContext<ConfigurationTmdb?>(Dispatchers.IO) { getConfiguration() }
                     actorsTmdb = withContext(Dispatchers.IO) { getActors(id = id) }
                 }.onFailure { handleCallError(it) }
             }
@@ -52,12 +56,12 @@ class MovieRepository(
             }
             response?.let {
                 coroutineScope {
-                    withContext(Dispatchers.IO) {
+                    withContext<Unit>(Dispatchers.IO) {
                         moviesDatabase.moviesDao.insertActors(
                             actors
                         )
                     }
-                    withContext(Dispatchers.IO) {
+                    withContext<Unit>(Dispatchers.IO) {
                         moviesDatabase.moviesDao.insertActorsOfMovie(
                             movieActors
                         )
@@ -66,9 +70,6 @@ class MovieRepository(
             }
             response
         }
-
-        result?.also { return it }
-        return resultNetwork
     }
 
     private suspend fun loadGenres(idMovie: Int): List<Genre> = withContext(Dispatchers.IO) {
