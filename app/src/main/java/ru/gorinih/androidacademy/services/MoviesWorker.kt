@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable
 import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
+import androidx.paging.LoadType
 import androidx.work.Worker
 import androidx.work.WorkerParameters
 import com.bumptech.glide.Glide
@@ -22,8 +23,10 @@ import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.data.db.MoviesDatabase
+import ru.gorinih.androidacademy.data.db.MoviesRepoDatabase
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.data.network.MoviesApi
+import ru.gorinih.androidacademy.data.network.MoviesNetwork
 import ru.gorinih.androidacademy.presentation.MainActivity
 import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesRemoteMediator
 
@@ -124,6 +127,9 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
         return movie
     }
 
+    @FlowPreview
+    @ExperimentalSerializationApi
+    @ExperimentalCoroutinesApi
     @InternalCoroutinesApi
     private fun buildNotification(movie: Movies.Movie): NotificationCompat.Builder {
         val time = System.currentTimeMillis()
@@ -158,16 +164,19 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
     @ExperimentalSerializationApi
     private suspend fun getMovie(): Movies.Movie? {
         val movieApi = MoviesApi.newInstance()
+        val movieNetwork = MoviesNetwork(movieApi)
         val movieDatabase = MoviesDatabase.newInstance(context)
-        val movieMediator = MoviesRemoteMediator(movieApi, movieDatabase)
+        val moviesRepoDatabase = MoviesRepoDatabase(movieDatabase)
         val key = movieDatabase.remoteKeysDao.getMaxNextKey() ?: 0
         if (key != 0) {
-            val resultMovies =
-                movieMediator.getData(currentKey = key)
-            movieMediator.insertData(
+            val genres = movieNetwork.getGenres()
+            val resultMovies = movieNetwork.getMoviesList(currentKey = key, genres = genres)
+            moviesRepoDatabase.insertData(
                 currentKey = key,
                 endOfPaginationReached = resultMovies.isEmpty(),
-                result = resultMovies
+                result = resultMovies,
+                loadType = LoadType.APPEND,
+                STARTING_PAGE = 1
             )
             return resultMovies.maxOfWith(
                 compareBy { it?.rating }
