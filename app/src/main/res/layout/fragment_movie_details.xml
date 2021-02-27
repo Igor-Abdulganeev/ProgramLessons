@@ -1,17 +1,30 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?><!--
+<com.google.android.material.card.MaterialCardView
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    app:cardCornerRadius="8dp"
+    app:cardElevation="6dp"
+    app:cardUseCompatPadding="true"    >
+
+-->
+
+<ScrollView xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    android:transitionName="trans1"
+    android:id="@+id/scroll_details"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <androidx.constraintlayout.widget.ConstraintLayout
+        android:transitionName="@string/show_movie_name_transition"
         android:id="@+id/constraint_movie_details"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/sapphire_blue_one">
 
         <ProgressBar
+            android:transitionName="trans2"
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyleLarge"
             android:layout_width="wrap_content"
@@ -23,6 +36,7 @@
             app:layout_constraintBottom_toBottomOf="parent" />
 
         <androidx.recyclerview.widget.RecyclerView
+            android:transitionName="trans3"
             android:id="@+id/list_actors"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
@@ -31,9 +45,10 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/head_cast_text_view"
-            tools:listitem="@layout/actor_view_holder_item" />
+            tools:listitem="@layout/actor_item_view_holder" />
 
             <TextView
+                android:transitionName="trans4"
                 android:id="@+id/head_cast_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -48,6 +63,7 @@
                 tools:text="@string/head_cast" />
 
             <TextView
+                android:transitionName="trans5"
                 android:id="@+id/all_actors_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,6 +79,7 @@
                 tools:text="@string/all_actors" />
 
             <TextView
+                android:transitionName="trans6"
                 android:id="@+id/description_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -81,6 +98,7 @@
                 tools:text="@string/text_description" />
 
             <TextView
+                android:transitionName="trans7"
                 android:id="@+id/head_description_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -97,6 +115,7 @@
                 tools:text="@string/head_description" />
 
             <TextView
+                android:transitionName="trans8"
                 android:id="@+id/reviews_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -114,6 +133,7 @@
         -->
 
         <RatingBar
+            android:transitionName="trans9"
             android:id="@+id/reviews_rating_bar"
             style="?android:attr/ratingBarStyleSmall"
             android:layout_width="wrap_content"
@@ -129,6 +149,7 @@
                 tools:rating="4" />
 
             <TextView
+                android:transitionName="trans10"
                 android:id="@+id/tag_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -144,6 +165,7 @@
                 tools:text="@string/tag_text" />
 
             <TextView
+                android:transitionName="@string/fragmentB"
                 android:id="@+id/name_movie_text_view"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -164,6 +186,7 @@
                 tools:text="@string/name_movie" />
 
             <View
+                android:transitionName="trans12"
                 android:id="@+id/mask_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -176,6 +199,7 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <ImageView
+                android:transitionName="trans13"
                 android:id="@+id/movie_image_view"
                 android:layout_width="0dp"
                 android:layout_height="0dp"
@@ -193,6 +217,7 @@
                 tools:src="@drawable/ic_no_image" />
 
             <View
+                android:transitionName="trans14"
                 android:id="@+id/pg_view"
                 android:layout_width="24dp"
                 android:layout_height="24dp"
@@ -206,6 +231,7 @@
                 app:layout_constraintTop_toBottomOf="@id/back_text_view" />
 
             <TextView
+                android:transitionName="trans15"
                 android:id="@+id/pg_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -219,6 +245,7 @@
                 tools:text="@string/pg_text" />
 
             <ImageView
+                android:transitionName="trans16"
                 android:id="@+id/back_image_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -233,6 +260,7 @@
                 tools:src="@drawable/ic_navigate_before_12" />
 
             <TextView
+                android:transitionName="trans17"
                 android:id="@+id/back_text_view"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -249,6 +277,7 @@
                 app:layout_constraintTop_toTopOf="@id/back_image_view"
                 tools:text="@string/text_back" />
 
-        </androidx.constraintlayout.widget.ConstraintLayout>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
-    </ScrollView>
+</ScrollView><!--
+</com.google.android.material.card.MaterialCardView>-->

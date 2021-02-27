@@ -43,6 +43,7 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
         }
     }
 
+    @InternalCoroutinesApi
     private fun showNotification(movieNotification: Movies.Movie) {
         val notificationBuilder = buildNotification(movieNotification)
         val notificationManager = NotificationManagerCompat.from(context.applicationContext)
@@ -123,6 +124,7 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
         return movie
     }
 
+    @InternalCoroutinesApi
     private fun buildNotification(movie: Movies.Movie): NotificationCompat.Builder {
         val time = System.currentTimeMillis()
         val genres = movie.listOfGenre.map {

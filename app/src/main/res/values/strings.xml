@@ -34,5 +34,8 @@
     <string name="notification_channel_id">MovieView</string>
     <string name="name_notification_channel">New movie show</string>
     <string name="name_intent">idMovie</string>
+    <string name="select_movie_name_transition">selected_movie</string>
+    <string name="show_movie_name_transition">show_details_movie_name_transition</string>
+    <string name="fragmentB">fragment_b</string>
 
 </resources>

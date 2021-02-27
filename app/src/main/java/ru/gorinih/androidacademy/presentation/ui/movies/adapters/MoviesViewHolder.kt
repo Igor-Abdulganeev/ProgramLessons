@@ -2,13 +2,16 @@ package ru.gorinih.androidacademy.presentation.ui.movies.adapters
 
 import android.graphics.drawable.Drawable
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.ViewCompat
 import androidx.core.view.isVisible
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
+import com.google.android.material.imageview.ShapeableImageView
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.databinding.MovieItemViewHolderBinding
@@ -18,12 +21,13 @@ class MoviesViewHolder private constructor(private val binding: MovieItemViewHol
 
     fun bind(
         item: Movies.Movie,
-        listener: (Int) -> Unit
+        listener: (Int, View) -> Unit
     ) {
         val resource = itemView.resources
         with(binding) {
             progressBar.isVisible = true
-            constraintMovieList.setOnClickListener { listener(item.id) }
+            constraintMovieList.setOnClickListener { listener(item.id, constraintMovieList) }
+            ViewCompat.setTransitionName(constraintMovieList, item.id.toString())
             nameMovieTextView.text = item.nameMovie
             minuteTextView.text =
                 resource.getString(R.string.movie_length, item.duration.toString())

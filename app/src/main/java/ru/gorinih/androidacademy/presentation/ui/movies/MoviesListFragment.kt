@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +14,7 @@ import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -26,6 +28,7 @@ import ru.gorinih.androidacademy.presentation.ui.movies.viewmodel.MoviesViewMode
 @FlowPreview
 @InternalCoroutinesApi
 @ExperimentalSerializationApi
+@ExperimentalCoroutinesApi
 class MoviesListFragment : Fragment() {
 
     private var _binding: FragmentMoviesListBinding? = null
@@ -49,12 +52,22 @@ class MoviesListFragment : Fragment() {
             binding.root
         }
 
-    @ExperimentalCoroutinesApi
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         initViewModel()
         initAdapter()
         observeData()
+        postTransition(view)
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        exitTransition = MaterialElevationScale(false).apply {
+            duration = 500L
+        }
+        reenterTransition = MaterialElevationScale(true).apply {
+            duration = 1100L
+        }
     }
 
     override fun onAttach(context: Context) {
@@ -74,7 +87,6 @@ class MoviesListFragment : Fragment() {
         super.onDestroyView()
     }
 
-    @ExperimentalCoroutinesApi
     private fun observeData() {
         binding.retryButton.setOnClickListener { adapterList.retry() }
         jobMovies?.cancel()
@@ -110,8 +122,8 @@ class MoviesListFragment : Fragment() {
         }
         binding.listMovies.layoutManager = layoutManager
 
-        adapterList = MoviesListRecyclerViewAdapter {
-            listenerClickFragment?.onMovieClick(it, false)
+        adapterList = MoviesListRecyclerViewAdapter { id, view ->
+            listenerClickFragment?.onMovieClick(id, view)
         }
         viewLifecycleOwner.lifecycleScope.launch {
             adapterList.loadStateFlow.collectLatest {
@@ -126,8 +138,13 @@ class MoviesListFragment : Fragment() {
             header = MoviesLoadStateAdapter { adapterList.retry() },
             footer = MoviesLoadStateAdapter { adapterList.retry() }
         )
+    }
 
-
+    private fun postTransition(view: View) {
+        postponeEnterTransition()
+        view.doOnPreDraw {
+            startPostponedEnterTransition()
+        }
     }
 
     private fun initViewModel() {
@@ -152,5 +169,5 @@ class MoviesListFragment : Fragment() {
 }
 
 interface ClickFragment {
-    fun onMovieClick(id: Int, startNotify: Boolean)
+    fun onMovieClick(id: Int, view: View)
 }

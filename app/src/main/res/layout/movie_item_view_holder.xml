@@ -6,9 +6,11 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:layout_margin="@dimen/margin_8"
+    android:transitionName="@string/select_movie_name_transition"
     android:background="@drawable/bg_corners_gradient_stroke">
 
     <ProgressBar
+        android:transitionName="trans1"
         android:id="@+id/progressBar"
         style="?android:attr/progressBarStyle"
         android:layout_width="wrap_content"
@@ -20,6 +22,7 @@
         app:layout_constraintBottom_toBottomOf="parent" />
 
     <TextView
+        android:transitionName="trans2"
         android:id="@+id/minute_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -38,6 +41,7 @@
         tools:text="137 min" />
 
     <TextView
+        android:transitionName="fragment_a"
         android:id="@+id/name_movie_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -54,6 +58,7 @@
         tools:text="Avengers: End Game" />
 
     <com.google.android.material.imageview.ShapeableImageView
+        android:transitionName="trans4"
         android:id="@+id/movie_image_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -72,6 +77,7 @@
 
 
     <ImageView
+        android:transitionName="trans5"
         android:id="@+id/mask_view"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -84,6 +90,7 @@
 
 
     <TextView
+        android:transitionName="trans6"
         android:id="@+id/reviews_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -100,6 +107,7 @@
         tools:text="125 REVIEWS" />
 
     <RatingBar
+        android:transitionName="trans7"
         android:id="@+id/reviews_rating_bar"
         style="?android:attr/ratingBarStyleSmall"
         android:layout_width="wrap_content"
@@ -119,6 +127,7 @@
         tools:rating="4" />
 
     <TextView
+        android:transitionName="trans8"
         android:id="@+id/tag_text_view"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
@@ -136,6 +145,7 @@
         tools:text="@string/tag_text" />
 
     <View
+        android:transitionName="trans9"
         android:id="@+id/pg_view"
         android:layout_width="24dp"
         android:layout_height="24dp"
@@ -147,6 +157,7 @@
         app:layout_constraintTop_toTopOf="@id/movie_image_view" />
 
     <TextView
+        android:transitionName="trans10"
         android:id="@+id/pg_text_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -162,6 +173,7 @@
         tools:text="@string/pg_text" />
 
     <ImageView
+        android:transitionName="trans11"
         android:id="@+id/favorite"
         android:layout_width="16dp"
         android:layout_height="14dp"

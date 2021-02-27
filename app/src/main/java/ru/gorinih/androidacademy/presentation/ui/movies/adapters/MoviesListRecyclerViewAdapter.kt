@@ -1,10 +1,11 @@
 package ru.gorinih.androidacademy.presentation.ui.movies.adapters
 
+import android.view.View
 import android.view.ViewGroup
 import androidx.paging.PagingDataAdapter
 import ru.gorinih.androidacademy.data.models.Movies
 
-class MoviesListRecyclerViewAdapter(private val listener: (Int) -> Unit) :
+class MoviesListRecyclerViewAdapter(private val listener: (Int, View) -> Unit) :
     PagingDataAdapter<Movies, MoviesListViewHolder>(MoviesListDiffUtils()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MoviesListViewHolder {
