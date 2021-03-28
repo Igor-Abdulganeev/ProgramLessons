@@ -12,11 +12,13 @@ import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
 import ru.gorinih.androidacademy.data.db.MoviesDatabase
 import ru.gorinih.androidacademy.data.network.MoviesApi
+import javax.inject.Singleton
 
 @Module
 @ExperimentalSerializationApi
 class MoviesApiModule {
 
+    @Singleton
     @Provides
     fun newInstanceApi(): MoviesApi {
         val logging = OkHttpClient().newBuilder()

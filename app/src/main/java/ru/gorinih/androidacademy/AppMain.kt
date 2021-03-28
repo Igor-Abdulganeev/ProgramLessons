@@ -11,8 +11,8 @@ import android.app.Application
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.serialization.ExperimentalSerializationApi
-import ru.gorinih.androidacademy.presentation.ui.movies.di.DaggerMoviesComponent
-import ru.gorinih.androidacademy.presentation.ui.movies.di.MoviesComponent
+import ru.gorinih.androidacademy.di.DaggerMoviesComponent
+import ru.gorinih.androidacademy.di.MoviesComponent
 import ru.gorinih.androidacademy.services.MoviesRepoWorker
 
 class AppMain : Application() {

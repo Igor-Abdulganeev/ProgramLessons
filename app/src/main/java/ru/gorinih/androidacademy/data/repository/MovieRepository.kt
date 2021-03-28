@@ -9,8 +9,9 @@ import okio.IOException
 import ru.gorinih.androidacademy.data.db.MoviesDatabase
 import ru.gorinih.androidacademy.data.models.*
 import ru.gorinih.androidacademy.data.network.MoviesApi
+import javax.inject.Inject
 
-class MovieRepository(
+class MovieRepository @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviesDatabase: MoviesDatabase
 ) {

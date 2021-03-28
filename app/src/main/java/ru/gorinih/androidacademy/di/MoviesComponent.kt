@@ -1,7 +1,6 @@
-package ru.gorinih.androidacademy.presentation.ui.movies.di
+package ru.gorinih.androidacademy.di
 
 import android.content.Context
-import androidx.fragment.app.Fragment
 import dagger.BindsInstance
 import dagger.Component
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -10,14 +9,14 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.data.di.MoviesApiModule
 import ru.gorinih.androidacademy.data.di.MoviesDatabaseModule
-import ru.gorinih.androidacademy.presentation.MainActivity
+import ru.gorinih.androidacademy.presentation.ui.movie.MovieDetailsFragment
 import ru.gorinih.androidacademy.presentation.ui.movies.MoviesListFragment
+import javax.inject.Singleton
 
-@Component(modules = [MoviesApiModule::class, MoviesDatabaseModule::class])
-@InternalCoroutinesApi
-@FlowPreview
 @ExperimentalSerializationApi
-@ExperimentalCoroutinesApi
+@InternalCoroutinesApi
+@Singleton
+@Component(modules = [MoviesApiModule::class, MoviesDatabaseModule::class])
 interface MoviesComponent {
 
     @Component.Factory
@@ -25,5 +24,9 @@ interface MoviesComponent {
         fun create(@BindsInstance context: Context): MoviesComponent
     }
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     fun inject(fragment: MoviesListFragment)
+
+    fun inject(fragment: MovieDetailsFragment)
 }
