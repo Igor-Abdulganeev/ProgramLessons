@@ -23,7 +23,6 @@ class MovieDetailsViewModel(private val movieRepository: MovieRepository) : View
                     val newMovie: Movies.Movie? = movieRepository.loadMovieNetwork(idMove)
                     newMovie?.let { _movie.value = newMovie }
                 }
-
             }
         }
     }
