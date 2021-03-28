@@ -6,12 +6,13 @@ import androidx.paging.PagingData
 import androidx.paging.cachedIn
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.data.repository.MoviesRepository
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewModel() {
+class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
+    ViewModel() {
 
     private var currentMovies: Flow<PagingData<Movies>>? = null
 
@@ -23,24 +24,6 @@ class MoviesViewModel(private val moviesRepository: MoviesRepository) : ViewMode
         }
         val newMovies: Flow<PagingData<Movies>> =
             moviesRepository.loadMovies()
-/*
-                .mapLatest {
-                    it.insertSeparators { befor, after ->
-                        if (befor.let {
-                                (it as Movies.Movie).idDb
-                            } == 1) {
-                            Movies.Header
-                        } else {
-                            null
-                        }
-                    }
-                }
-*/
-/*
-                .transform {
-                    emit(PagingData.from(listOf(Movies.Header) as List<Movies>))
-                }
-*/
                 .cachedIn(viewModelScope)
         currentMovies = newMovies
 

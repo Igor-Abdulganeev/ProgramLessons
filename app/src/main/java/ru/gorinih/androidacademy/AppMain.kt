@@ -1,15 +1,29 @@
 package ru.gorinih.androidacademy
 
 import android.annotation.SuppressLint
-import android.app.Application
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.os.Build
 import androidx.core.app.NotificationManagerCompat
 import androidx.work.WorkManager
+import kotlinx.coroutines.InternalCoroutinesApi
+import android.app.Application
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
+import kotlinx.serialization.ExperimentalSerializationApi
+import ru.gorinih.androidacademy.presentation.ui.movies.di.DaggerMoviesComponent
+import ru.gorinih.androidacademy.presentation.ui.movies.di.MoviesComponent
 import ru.gorinih.androidacademy.services.MoviesRepoWorker
 
 class AppMain : Application() {
+
+    @ExperimentalCoroutinesApi
+    @ExperimentalSerializationApi
+    @FlowPreview
+    @InternalCoroutinesApi
+    val appMain: MoviesComponent by lazy {
+        DaggerMoviesComponent.factory().create(applicationContext)
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -39,6 +53,7 @@ class AppMain : Application() {
 
     companion object {
         private lateinit var hInstance: Application
-
     }
 }
+
+

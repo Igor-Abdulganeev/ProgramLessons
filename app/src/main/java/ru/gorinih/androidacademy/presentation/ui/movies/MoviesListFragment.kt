@@ -9,7 +9,6 @@ import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
@@ -18,12 +17,13 @@ import com.google.android.material.transition.MaterialElevationScale
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.serialization.ExperimentalSerializationApi
+import ru.gorinih.androidacademy.AppMain
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.databinding.FragmentMoviesListBinding
 import ru.gorinih.androidacademy.presentation.ui.movies.adapters.MoviesListRecyclerViewAdapter
 import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesLoadStateAdapter
 import ru.gorinih.androidacademy.presentation.ui.movies.viewmodel.MoviesViewModel
-import ru.gorinih.androidacademy.presentation.ui.movies.viewmodel.MoviesViewModelFactory
+import javax.inject.Inject
 
 @FlowPreview
 @InternalCoroutinesApi
@@ -38,7 +38,8 @@ class MoviesListFragment : Fragment() {
 
     private var listenerClickFragment: ClickFragment? = null
 
-    private lateinit var viewModel: MoviesViewModel
+    @Inject
+    lateinit var viewModel: MoviesViewModel
 
     private var jobMovies: Job? = null
 
@@ -54,7 +55,7 @@ class MoviesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        initViewModel()
+        // initViewModel()  using dagger
         initAdapter()
         observeData()
         postTransition(view)
@@ -74,6 +75,7 @@ class MoviesListFragment : Fragment() {
         super.onAttach(context)
         if (context is ClickFragment)
             listenerClickFragment = context
+        (requireActivity().application as AppMain).appMain.inject(this)
     }
 
     override fun onDetach() {
@@ -147,6 +149,7 @@ class MoviesListFragment : Fragment() {
         }
     }
 
+/*
     private fun initViewModel() {
         viewModel =
             ViewModelProvider(
@@ -154,6 +157,7 @@ class MoviesListFragment : Fragment() {
                 MoviesViewModelFactory(requireContext())
             ).get(MoviesViewModel::class.java)
     }
+*/
 
     private fun getSpanCount(): Int {
         return when (resources.configuration.orientation) {
