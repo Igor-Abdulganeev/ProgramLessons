@@ -8,8 +8,9 @@ import kotlinx.coroutines.withContext
 import ru.gorinih.androidacademy.data.models.Genre
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesRemoteMediator
+import javax.inject.Inject
 
-class MoviesRepository(private val moviesMediator: MoviesRemoteMediator) {
+class MoviesRepository @Inject constructor(private val moviesMediator: MoviesRemoteMediator) {
 
     @ExperimentalPagingApi
     @OptIn(ExperimentalPagingApi::class)

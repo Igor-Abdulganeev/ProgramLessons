@@ -9,9 +9,10 @@ import ru.gorinih.androidacademy.data.db.MoviesRepoDatabase
 import ru.gorinih.androidacademy.data.models.*
 import ru.gorinih.androidacademy.data.network.MoviesNetwork
 import java.io.InvalidObjectException
+import javax.inject.Inject
 
 @OptIn(ExperimentalPagingApi::class)
-class MoviesRemoteMediator(
+class MoviesRemoteMediator @Inject constructor(
     private val moviesNetwork: MoviesNetwork,
     private val moviesRepoDatabase: MoviesRepoDatabase
 ) : RemoteMediator<Int, Movies>() {

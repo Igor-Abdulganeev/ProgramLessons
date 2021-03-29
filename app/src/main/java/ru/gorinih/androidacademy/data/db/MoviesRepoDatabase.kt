@@ -11,8 +11,9 @@ import ru.gorinih.androidacademy.data.models.Genre
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.data.models.RelationGenresOfMovie
 import ru.gorinih.androidacademy.data.models.RemoteKeys
+import javax.inject.Inject
 
-class MoviesRepoDatabase(private val moviesDatabase: MoviesDatabase) {
+class MoviesRepoDatabase @Inject constructor(private val moviesDatabase: MoviesDatabase) {
 
     suspend fun insertData(
         currentKey: Int,

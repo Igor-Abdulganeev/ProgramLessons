@@ -4,8 +4,9 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import ru.gorinih.androidacademy.data.models.*
+import javax.inject.Inject
 
-class MoviesNetwork(private val moviesApi: MoviesApi) {
+class MoviesNetwork @Inject constructor(private val moviesApi: MoviesApi) {
 
     suspend fun getGenres(): List<Genre> = withContext(Dispatchers.IO) {
         val genreTmdb = withContext(Dispatchers.IO) { moviesApi.getGenre() }
