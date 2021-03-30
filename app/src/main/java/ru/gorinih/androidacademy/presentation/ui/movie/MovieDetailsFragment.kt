@@ -14,12 +14,15 @@ import android.view.animation.OvershootInterpolator
 import androidx.annotation.RequiresApi
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.DataSource
 import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.transition.MaterialContainerTransform
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.AppMain
@@ -37,6 +40,7 @@ class MovieDetailsFragment : Fragment() {
     private val binding get() = _binding!!
 
     @Inject
+    lateinit var detailsViewModelFactory: ViewModelProvider.Factory
     lateinit var detailsViewModel: MovieDetailsViewModel
 
     override fun onCreateView(
@@ -56,6 +60,9 @@ class MovieDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val idMovie = requireNotNull(arguments?.getInt(ID_MOVIE))
+
+        detailsViewModel =
+            ViewModelProvider(this, detailsViewModelFactory)[MovieDetailsViewModel::class.java]
 /*
         detailsViewModel = ViewModelProvider(
             this,
@@ -87,6 +94,8 @@ class MovieDetailsFragment : Fragment() {
 
     }
 
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     @ExperimentalSerializationApi
     @InternalCoroutinesApi
     override fun onAttach(context: Context) {
@@ -143,7 +152,6 @@ class MovieDetailsFragment : Fragment() {
             })
             .into(binding.movieImageView)
     }
-
 
     companion object {
         private const val ID_MOVIE = "idMovie"

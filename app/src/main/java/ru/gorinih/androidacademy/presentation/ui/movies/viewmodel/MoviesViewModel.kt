@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.presentation.ui.movies.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -11,10 +12,16 @@ import ru.gorinih.androidacademy.data.repository.MoviesRepository
 import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-class MoviesViewModel @Inject constructor(private val moviesRepository: MoviesRepository) :
+class MoviesViewModel @Inject constructor() :
     ViewModel() {
+    init {
+        Log.d("ViewModel", "First init ViewModel")
+    }
 
     private var currentMovies: Flow<PagingData<Movies>>? = null
+
+    @Inject
+    lateinit var moviesRepository: MoviesRepository
 
     @OptIn(androidx.paging.ExperimentalPagingApi::class)
     fun getMovies(): Flow<PagingData<Movies>> {

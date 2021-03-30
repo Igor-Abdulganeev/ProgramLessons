@@ -13,10 +13,15 @@ import ru.gorinih.androidacademy.presentation.ui.movie.MovieDetailsFragment
 import ru.gorinih.androidacademy.presentation.ui.movies.MoviesListFragment
 import javax.inject.Singleton
 
+@ExperimentalCoroutinesApi
 @ExperimentalSerializationApi
 @InternalCoroutinesApi
 @Singleton
-@Component(modules = [MoviesApiModule::class, MoviesDatabaseModule::class])
+@Component(
+    modules = [MoviesApiModule::class,
+        MoviesDatabaseModule::class,
+        MoviesViewModelModule::class]
+)
 interface MoviesComponent {
 
     @Component.Factory
@@ -27,6 +32,6 @@ interface MoviesComponent {
     @FlowPreview
     @ExperimentalCoroutinesApi
     fun inject(fragment: MoviesListFragment)
-
     fun inject(fragment: MovieDetailsFragment)
+
 }

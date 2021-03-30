@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.core.view.doOnPreDraw
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
 import androidx.paging.LoadState
 import androidx.recyclerview.widget.GridLayoutManager
@@ -39,6 +40,7 @@ class MoviesListFragment : Fragment() {
     private var listenerClickFragment: ClickFragment? = null
 
     @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
     lateinit var viewModel: MoviesViewModel
 
     private var jobMovies: Job? = null
@@ -56,6 +58,7 @@ class MoviesListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         // initViewModel()  using dagger
+        viewModel = ViewModelProvider(this, viewModelFactory)[MoviesViewModel::class.java]
         initAdapter()
         observeData()
         postTransition(view)

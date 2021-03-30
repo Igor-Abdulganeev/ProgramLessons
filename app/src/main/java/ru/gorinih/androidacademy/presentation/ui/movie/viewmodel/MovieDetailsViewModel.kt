@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.presentation.ui.movie.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,8 +10,16 @@ import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.data.repository.MovieRepository
 import javax.inject.Inject
 
-class MovieDetailsViewModel @Inject constructor(private val movieRepository: MovieRepository) :
+class MovieDetailsViewModel @Inject constructor() :
     ViewModel() {
+
+    init {
+        Log.d("ViewModel", "Second init ViewModel")
+    }
+
+    @Inject
+    lateinit var movieRepository: MovieRepository
+
     private var _movie = MutableLiveData<Movies.Movie>()
     val movie: LiveData<Movies.Movie>
         get() = _movie
