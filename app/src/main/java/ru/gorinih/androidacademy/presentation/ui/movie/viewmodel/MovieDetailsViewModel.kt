@@ -8,8 +8,10 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.data.repository.MovieRepository
+import ru.gorinih.androidacademy.di.FragmentScope
 import javax.inject.Inject
 
+@FragmentScope
 class MovieDetailsViewModel @Inject constructor() :
     ViewModel() {
 

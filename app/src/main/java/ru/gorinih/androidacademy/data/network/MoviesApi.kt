@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.data.network
 
+import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
@@ -11,7 +12,9 @@ import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 import ru.gorinih.androidacademy.data.models.*
+import javax.inject.Singleton
 
+@Singleton
 interface MoviesApi {
     @GET("configuration?api_key=69f47bb575e0708f5804d2b046fcd103")
     suspend fun getConfiguration(): ConfigurationTmdb?
@@ -30,6 +33,10 @@ interface MoviesApi {
 
     companion object {
         private const val BASE_URL = "https://api.themoviedb.org/3/"
+
+        init {
+            Log.d("ViewModel", "Movie Api init")
+        }
 
         @ExperimentalSerializationApi
         fun newInstance(): MoviesApi {

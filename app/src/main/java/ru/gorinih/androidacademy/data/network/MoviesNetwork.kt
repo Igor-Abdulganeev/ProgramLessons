@@ -1,12 +1,19 @@
 package ru.gorinih.androidacademy.data.network
 
+import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.withContext
 import ru.gorinih.androidacademy.data.models.*
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 class MoviesNetwork @Inject constructor(private val moviesApi: MoviesApi) {
+
+    init {
+        Log.d("ViewModel", "MoviesNetwork init")
+    }
 
     suspend fun getGenres(): List<Genre> = withContext(Dispatchers.IO) {
         val genreTmdb = withContext(Dispatchers.IO) { moviesApi.getGenre() }

@@ -13,5 +13,4 @@ class MoviesDatabaseModule() {
     @Provides
     fun provideDatabase(context: Context): MoviesDatabase =
         MoviesDatabase.newInstance(context)
-
 }

@@ -9,12 +9,19 @@ import okio.IOException
 import ru.gorinih.androidacademy.data.db.MoviesDatabase
 import ru.gorinih.androidacademy.data.models.*
 import ru.gorinih.androidacademy.data.network.MoviesApi
+import ru.gorinih.androidacademy.di.FragmentScope
 import javax.inject.Inject
+import javax.inject.Singleton
 
+@FragmentScope
 class MovieRepository @Inject constructor(
     private val moviesApi: MoviesApi,
     private val moviesDatabase: MoviesDatabase
 ) {
+    init {
+        Log.d("ViewModel", "Movie Repository init")
+    }
+
     @ExperimentalStdlibApi
     suspend fun loadMovie(id: Int): Movies.Movie? {
         val result: Movies.Movie? = moviesDatabase.withTransaction {
