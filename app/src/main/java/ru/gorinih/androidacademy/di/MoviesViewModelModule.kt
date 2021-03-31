@@ -19,10 +19,5 @@ abstract class MoviesViewModelModule {
     abstract fun bindMoviesViewModel(moviesViewModel: MoviesViewModel): ViewModel
 
     @Binds
-    @IntoMap
-    @ViewModelKey(MovieDetailsViewModel::class)
-    abstract fun bindMovieDetailsViewModel(movieDetailsViewModel: MovieDetailsViewModel): ViewModel
-
-    @Binds
     abstract fun bindViewModelFactory(factory: MovieViewModelFactory): ViewModelProvider.Factory
 }

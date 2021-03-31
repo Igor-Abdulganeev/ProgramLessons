@@ -9,7 +9,7 @@ import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
 import ru.gorinih.androidacademy.data.di.MoviesApiModule
 import ru.gorinih.androidacademy.data.di.MoviesDatabaseModule
-import ru.gorinih.androidacademy.presentation.ui.movie.MovieDetailsFragment
+import ru.gorinih.androidacademy.presentation.ui.movie.di.MovieDetailsSubComponent
 import ru.gorinih.androidacademy.presentation.ui.movies.MoviesListFragment
 import javax.inject.Singleton
 
@@ -20,7 +20,8 @@ import javax.inject.Singleton
 @Component(
     modules = [MoviesApiModule::class,
         MoviesDatabaseModule::class,
-        MoviesViewModelModule::class]
+        MoviesViewModelModule::class,
+        MoviesSubcomponents::class]
 )
 interface MoviesComponent {
 
@@ -29,9 +30,9 @@ interface MoviesComponent {
         fun create(@BindsInstance context: Context): MoviesComponent
     }
 
+    fun registrationSubComponent(): MovieDetailsSubComponent.Factory
+
     @FlowPreview
     @ExperimentalCoroutinesApi
     fun inject(fragment: MoviesListFragment)
-    fun inject(fragment: MovieDetailsFragment)
-
 }

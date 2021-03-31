@@ -100,7 +100,8 @@ class MovieDetailsFragment : Fragment() {
     @InternalCoroutinesApi
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (requireActivity().application as AppMain).appMain.inject(this)
+        (requireActivity().application as AppMain).appMain.registrationSubComponent().create()
+            .inject(this)
     }
 
     override fun onDestroy() {
