@@ -3,7 +3,7 @@ package ru.gorinih.androidacademy.services.di
 import dagger.Subcomponent
 import ru.gorinih.androidacademy.services.MoviesWorker
 
-@Subcomponent(modules = [MoviesWorkerModule::class])
+@Subcomponent
 interface MoviesWorkerSubComponent {
     @Subcomponent.Factory
     interface Factory {
