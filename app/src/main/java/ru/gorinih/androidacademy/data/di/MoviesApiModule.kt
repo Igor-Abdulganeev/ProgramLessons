@@ -1,7 +1,6 @@
 package ru.gorinih.androidacademy.data.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
-import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import kotlinx.serialization.ExperimentalSerializationApi
@@ -10,14 +9,13 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import ru.gorinih.androidacademy.data.db.MoviesDatabase
 import ru.gorinih.androidacademy.data.network.MoviesApi
 import javax.inject.Singleton
 
-@Module
-@ExperimentalSerializationApi
-class MoviesApiModule {
 
+@ExperimentalSerializationApi
+@Module
+class MoviesApiModule {
     @Singleton
     @Provides
     fun newInstanceApi(): MoviesApi {

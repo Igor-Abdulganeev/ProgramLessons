@@ -116,4 +116,6 @@ class MoviesRepoDatabase @Inject constructor(private val moviesDatabase: MoviesD
             }
         }
     }
+
+    fun getMaxNextKey() = moviesDatabase.remoteKeysDao.getMaxNextKey()
 }

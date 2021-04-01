@@ -57,7 +57,6 @@ class MoviesListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        // initViewModel()  using dagger
         viewModel = ViewModelProvider(this, viewModelFactory)[MoviesViewModel::class.java]
         initAdapter()
         observeData()
@@ -78,7 +77,9 @@ class MoviesListFragment : Fragment() {
         super.onAttach(context)
         if (context is ClickFragment)
             listenerClickFragment = context
-        (requireActivity().application as AppMain).appMain.inject(this)
+        (requireActivity().application as AppMain).appMain.registrationMoviesListSubcomponent()
+            .create()
+            .inject(this)
     }
 
     override fun onDetach() {
@@ -151,16 +152,6 @@ class MoviesListFragment : Fragment() {
             startPostponedEnterTransition()
         }
     }
-
-/*
-    private fun initViewModel() {
-        viewModel =
-            ViewModelProvider(
-                this,
-                MoviesViewModelFactory(requireContext())
-            ).get(MoviesViewModel::class.java)
-    }
-*/
 
     private fun getSpanCount(): Int {
         return when (resources.configuration.orientation) {

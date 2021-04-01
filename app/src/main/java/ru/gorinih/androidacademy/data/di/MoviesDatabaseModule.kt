@@ -5,11 +5,12 @@ import dagger.Module
 import dagger.Provides
 import kotlinx.coroutines.InternalCoroutinesApi
 import ru.gorinih.androidacademy.data.db.MoviesDatabase
-import javax.inject.Inject
+import javax.inject.Singleton
 
-@Module
 @InternalCoroutinesApi
+@Module
 class MoviesDatabaseModule() {
+    @Singleton
     @Provides
     fun provideDatabase(context: Context): MoviesDatabase =
         MoviesDatabase.newInstance(context)

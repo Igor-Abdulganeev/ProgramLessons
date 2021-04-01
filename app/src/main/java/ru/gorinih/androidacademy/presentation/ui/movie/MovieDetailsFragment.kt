@@ -63,12 +63,6 @@ class MovieDetailsFragment : Fragment() {
 
         detailsViewModel =
             ViewModelProvider(this, detailsViewModelFactory)[MovieDetailsViewModel::class.java]
-/*
-        detailsViewModel = ViewModelProvider(
-            this,
-            MovieDetailsViewModelFactory(requireContext())
-        ).get(MovieDetailsViewModel::class.java)
-*/
         detailsViewModel.movie.observe(viewLifecycleOwner, {
             showMovie(it)
         })
@@ -100,7 +94,8 @@ class MovieDetailsFragment : Fragment() {
     @InternalCoroutinesApi
     override fun onAttach(context: Context) {
         super.onAttach(context)
-        (requireActivity().application as AppMain).appMain.registrationSubComponent().create()
+        (requireActivity().application as AppMain).appMain.registrationMovieDetailsSubcomponent()
+            .create()
             .inject(this)
     }
 

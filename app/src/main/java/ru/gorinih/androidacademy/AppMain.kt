@@ -53,6 +53,7 @@ class AppMain : Application() {
 
     companion object {
         private lateinit var hInstance: Application
+
     }
 }
 
