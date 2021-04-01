@@ -13,6 +13,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
+import ru.gorinih.androidacademy.AppMain
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.presentation.ui.movie.MovieDetailsFragment
 import ru.gorinih.androidacademy.presentation.ui.movies.ClickFragment

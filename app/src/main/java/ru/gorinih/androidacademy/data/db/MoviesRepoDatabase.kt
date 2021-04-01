@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.data.db
 
+import android.util.Log
 import androidx.paging.LoadType
 import androidx.paging.PagingSource
 import androidx.paging.PagingState
@@ -11,8 +12,15 @@ import ru.gorinih.androidacademy.data.models.Genre
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.data.models.RelationGenresOfMovie
 import ru.gorinih.androidacademy.data.models.RemoteKeys
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MoviesRepoDatabase(private val moviesDatabase: MoviesDatabase) {
+@Singleton
+class MoviesRepoDatabase @Inject constructor(private val moviesDatabase: MoviesDatabase) {
+
+    init {
+        Log.d("ViewModel", "RepoDatabase init")
+    }
 
     suspend fun insertData(
         currentKey: Int,
@@ -108,4 +116,6 @@ class MoviesRepoDatabase(private val moviesDatabase: MoviesDatabase) {
             }
         }
     }
+
+    fun getMaxNextKey() = moviesDatabase.remoteKeysDao.getMaxNextKey()
 }

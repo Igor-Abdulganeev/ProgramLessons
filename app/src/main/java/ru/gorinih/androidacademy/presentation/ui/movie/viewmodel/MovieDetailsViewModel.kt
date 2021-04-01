@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.presentation.ui.movie.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -7,8 +8,20 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.launch
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.data.repository.MovieRepository
+import ru.gorinih.androidacademy.di.FragmentScope
+import javax.inject.Inject
 
-class MovieDetailsViewModel(private val movieRepository: MovieRepository) : ViewModel() {
+@FragmentScope
+class MovieDetailsViewModel @Inject constructor() :
+    ViewModel() {
+
+    init {
+        Log.d("ViewModel", "Second init ViewModel")
+    }
+
+    @Inject
+    lateinit var movieRepository: MovieRepository
+
     private var _movie = MutableLiveData<Movies.Movie>()
     val movie: LiveData<Movies.Movie>
         get() = _movie

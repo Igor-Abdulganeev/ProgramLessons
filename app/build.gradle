@@ -7,7 +7,7 @@ plugins {
 
 android {
     compileSdkVersion 30
-    buildToolsVersion "30.0.2"
+    buildToolsVersion "30.0.3"
 
     defaultConfig {
         applicationId "ru.gorinih.androidacademy"
@@ -73,6 +73,11 @@ dependencies {
 
 //Woker
     implementation 'androidx.work:work-runtime-ktx:2.5.0'
+
+    //dagger
+    def dagger_version = "2.33"
+    implementation "com.google.dagger:dagger:$dagger_version"
+    kapt "com.google.dagger:dagger-compiler:$dagger_version"
 
     testImplementation 'junit:junit:4.13.1'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'

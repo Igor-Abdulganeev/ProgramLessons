@@ -21,6 +21,7 @@ import com.bumptech.glide.request.target.Target
 import com.bumptech.glide.request.transition.Transition
 import kotlinx.coroutines.*
 import kotlinx.serialization.ExperimentalSerializationApi
+import ru.gorinih.androidacademy.AppMain
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.data.db.MoviesDatabase
 import ru.gorinih.androidacademy.data.db.MoviesRepoDatabase
@@ -29,13 +30,27 @@ import ru.gorinih.androidacademy.data.network.MoviesApi
 import ru.gorinih.androidacademy.data.network.MoviesNetwork
 import ru.gorinih.androidacademy.presentation.MainActivity
 import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesRemoteMediator
+import javax.inject.Inject
 
-class MoviesWorker(private val context: Context, workerParams: WorkerParameters) :
+class MoviesWorker @Inject constructor(
+    private val context: Context,
+    workerParams: WorkerParameters
+) :
     Worker(context, workerParams) {
 
+    @Inject
+    lateinit var movieNetwork: MoviesNetwork
+
+    @Inject
+    lateinit var moviesRepoDatabase: MoviesRepoDatabase
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
     @ExperimentalSerializationApi
     @InternalCoroutinesApi
     override fun doWork(): Result {
+        (context as AppMain).appMain.registrationMoviesWorker().create()
+            .inject(this)
         return try {
             val movieNotification = loadLastNotification()
             movieNotification?.let { showNotification(it) }
@@ -46,6 +61,9 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
         }
     }
 
+    @ExperimentalCoroutinesApi
+    @ExperimentalSerializationApi
+    @FlowPreview
     @InternalCoroutinesApi
     private fun showNotification(movieNotification: Movies.Movie) {
         val notificationBuilder = buildNotification(movieNotification)
@@ -163,11 +181,16 @@ class MoviesWorker(private val context: Context, workerParams: WorkerParameters)
     @InternalCoroutinesApi
     @ExperimentalSerializationApi
     private suspend fun getMovie(): Movies.Movie? {
+/*
         val movieApi = MoviesApi.newInstance()
         val movieNetwork = MoviesNetwork(movieApi)
         val movieDatabase = MoviesDatabase.newInstance(context)
         val moviesRepoDatabase = MoviesRepoDatabase(movieDatabase)
-        val key = movieDatabase.remoteKeysDao.getMaxNextKey() ?: 0
+*/
+        Log.d("ViewModel", "Worker init now")
+        val key = moviesRepoDatabase.getMaxNextKey() ?: 0
+        Log.d("ViewModel", "Worker init $key")
+
         if (key != 0) {
             val genres = movieNetwork.getGenres()
             val resultMovies = movieNetwork.getMoviesList(currentKey = key, genres = genres)

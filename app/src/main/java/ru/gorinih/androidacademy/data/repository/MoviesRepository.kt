@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.data.repository
 
+import android.util.Log
 import androidx.paging.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
@@ -8,8 +9,15 @@ import kotlinx.coroutines.withContext
 import ru.gorinih.androidacademy.data.models.Genre
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.presentation.ui.movies.paging.MoviesRemoteMediator
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class MoviesRepository(private val moviesMediator: MoviesRemoteMediator) {
+@Singleton
+class MoviesRepository @Inject constructor(private val moviesMediator: MoviesRemoteMediator) {
+
+    init {
+        Log.d("ViewModel", "Repository Movies init")
+    }
 
     @ExperimentalPagingApi
     @OptIn(ExperimentalPagingApi::class)

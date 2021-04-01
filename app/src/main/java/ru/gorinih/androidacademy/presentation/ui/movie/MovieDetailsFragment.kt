@@ -1,6 +1,7 @@
 package ru.gorinih.androidacademy.presentation.ui.movie
 
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.Drawable
 import android.os.Build
@@ -20,21 +21,27 @@ import com.bumptech.glide.load.engine.GlideException
 import com.bumptech.glide.request.RequestListener
 import com.bumptech.glide.request.target.Target
 import com.google.android.material.transition.MaterialContainerTransform
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.InternalCoroutinesApi
 import kotlinx.serialization.ExperimentalSerializationApi
+import ru.gorinih.androidacademy.AppMain
 import ru.gorinih.androidacademy.R
 import ru.gorinih.androidacademy.data.models.Movies
 import ru.gorinih.androidacademy.databinding.FragmentMovieDetailsBinding
+import ru.gorinih.androidacademy.di.MoviesComponent
 import ru.gorinih.androidacademy.presentation.ui.movie.adapters.ActorsListRecyclerViewAdapter
 import ru.gorinih.androidacademy.presentation.ui.movie.viewmodel.MovieDetailsViewModel
-import ru.gorinih.androidacademy.presentation.ui.movie.viewmodel.MovieDetailsViewModelFactory
+import javax.inject.Inject
 
 class MovieDetailsFragment : Fragment() {
 
     private var _binding: FragmentMovieDetailsBinding? = null
     private val binding get() = _binding!!
 
-    private lateinit var detailsViewModel: MovieDetailsViewModel
+    @Inject
+    lateinit var detailsViewModelFactory: ViewModelProvider.Factory
+    lateinit var detailsViewModel: MovieDetailsViewModel
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -53,10 +60,9 @@ class MovieDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val idMovie = requireNotNull(arguments?.getInt(ID_MOVIE))
-        detailsViewModel = ViewModelProvider(
-            this,
-            MovieDetailsViewModelFactory(requireContext())
-        ).get(MovieDetailsViewModel::class.java)
+
+        detailsViewModel =
+            ViewModelProvider(this, detailsViewModelFactory)[MovieDetailsViewModel::class.java]
         detailsViewModel.movie.observe(viewLifecycleOwner, {
             showMovie(it)
         })
@@ -80,6 +86,17 @@ class MovieDetailsFragment : Fragment() {
             interpolator = LinearInterpolator()
         }
 
+    }
+
+    @FlowPreview
+    @ExperimentalCoroutinesApi
+    @ExperimentalSerializationApi
+    @InternalCoroutinesApi
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        (requireActivity().application as AppMain).appMain.registrationMovieDetailsSubcomponent()
+            .create()
+            .inject(this)
     }
 
     override fun onDestroy() {
@@ -131,7 +148,6 @@ class MovieDetailsFragment : Fragment() {
             })
             .into(binding.movieImageView)
     }
-
 
     companion object {
         private const val ID_MOVIE = "idMovie"

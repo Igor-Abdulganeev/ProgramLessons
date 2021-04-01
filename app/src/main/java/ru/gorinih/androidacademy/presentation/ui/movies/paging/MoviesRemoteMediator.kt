@@ -1,5 +1,6 @@
 package ru.gorinih.androidacademy.presentation.ui.movies.paging
 
+import android.util.Log
 import androidx.paging.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
@@ -9,9 +10,12 @@ import ru.gorinih.androidacademy.data.db.MoviesRepoDatabase
 import ru.gorinih.androidacademy.data.models.*
 import ru.gorinih.androidacademy.data.network.MoviesNetwork
 import java.io.InvalidObjectException
+import javax.inject.Inject
+import javax.inject.Singleton
 
+@Singleton
 @OptIn(ExperimentalPagingApi::class)
-class MoviesRemoteMediator(
+class MoviesRemoteMediator @Inject constructor(
     private val moviesNetwork: MoviesNetwork,
     private val moviesRepoDatabase: MoviesRepoDatabase
 ) : RemoteMediator<Int, Movies>() {
@@ -69,5 +73,10 @@ class MoviesRemoteMediator(
 
     companion object {
         private const val STARTING_PAGE = 1
+
+        init {
+            Log.d("ViewModel", "RemoteMediator init")
+        }
+
     }
 }
